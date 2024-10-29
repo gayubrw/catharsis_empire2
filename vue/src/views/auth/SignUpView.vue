@@ -1,202 +1,243 @@
 <template>
-    <div class="min-h-screen flex bg-gray-100">
-        <!-- Left side - Brand Section -->
+    <div class="w-full h-[43rem] bg-black">
         <div
-            class="w-2/3 bg-indigo-600 text-white p-12 flex flex-col justify-center items-center relative overflow-hidden"
+            class="h-full w-full max-w-md mx-auto px-4 flex flex-col justify-center"
         >
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 opacity-90"
-            ></div>
-
-            <!-- Decorative circles -->
-            <div
-                class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"
-            ></div>
-            <div
-                class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"
-            ></div>
-
-            <!-- Content -->
-            <div class="relative z-10 text-center">
-                <a href="#" class="flex items-center justify-center mb-8">
-                    <img src="#" alt="Logo" class="w-12 h-12 mr-4" />
-                    <span class="text-3xl font-bold">AppName</span>
-                </a>
-                <h1 class="text-5xl font-bold mb-6">Join Us Today!</h1>
-                <p class="text-xl text-indigo-100 max-w-lg">
-                    Create an account and start your journey with us.
-                </p>
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold mb-2 text-white">
+                    Create Account
+                </h1>
+                <p class="text-gray-400">Fill in your details to register</p>
             </div>
-        </div>
 
-        <!-- Right side - Register Form -->
-        <div class="w-1/3 bg-white p-12 flex flex-col justify-center">
-            <div class="max-w-md w-full mx-auto">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900">
-                        Create Account
-                    </h2>
-                    <p class="mt-2 text-gray-600">
-                        Already have an account?
-                        <router-link
-                            to="/signin"
-                            class="text-indigo-600 hover:text-indigo-500 font-medium"
-                        >
-                            Sign in
-                        </router-link>
+            <!-- Form -->
+            <form @submit.prevent="handleSubmit" class="space-y-6">
+                <!-- Name Field -->
+                <div class="space-y-2">
+                    <label
+                        for="name"
+                        class="block text-sm font-medium text-gray-300"
+                    >
+                        Full Name
+                    </label>
+                    <input
+                        id="name"
+                        type="text"
+                        v-model="name"
+                        required
+                        class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
+                        :class="{ 'border-red-500': errors.name }"
+                    />
+                    <p v-if="errors.name" class="text-red-500 text-sm mt-1">
+                        {{ errors.name }}
                     </p>
                 </div>
 
-                <form @submit.prevent="handleRegister" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700"
-                            >Full Name</label
-                        >
-                        <input
-                            type="text"
-                            v-model="registerForm.name"
-                            class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700"
-                            >Email</label
-                        >
-                        <input
-                            type="email"
-                            v-model="registerForm.email"
-                            class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700"
-                            >Password</label
-                        >
-                        <input
-                            type="password"
-                            v-model="registerForm.password"
-                            class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700"
-                            >Confirm Password</label
-                        >
-                        <input
-                            type="password"
-                            v-model="registerForm.confirmPassword"
-                            class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-                            required
-                        />
-                    </div>
-
-                    <div class="flex items-center">
-                        <input
-                            type="checkbox"
-                            class="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                        />
-                        <label class="ml-2 text-sm text-gray-600">
-                            I agree to the
-                            <a
-                                href="#"
-                                class="text-indigo-600 hover:text-indigo-500"
-                                >Terms of Service</a
-                            >
-                            and
-                            <a
-                                href="#"
-                                class="text-indigo-600 hover:text-indigo-500"
-                                >Privacy Policy</a
-                            >
-                        </label>
-                    </div>
-
-                    <button
-                        type="submit"
-                        class="w-full py-3 px-4 border border-transparent rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                <!-- Email Field -->
+                <div class="space-y-2">
+                    <label
+                        for="email"
+                        class="block text-sm font-medium text-gray-300"
                     >
-                        Create Account
-                    </button>
-                </form>
-
-                <!-- Social Register -->
-                <div class="mt-8">
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500"
-                                >Or sign up with</span
-                            >
-                        </div>
-                    </div>
-
-                    <div class="mt-6 grid grid-cols-2 gap-4">
-                        <a
-                            href="#"
-                            class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                            <img src="#" alt="Google" class="h-5 w-5 mr-2" />
-                            Google
-                        </a>
-                        <a
-                            href="#"
-                            class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                            <img src="#" alt="Facebook" class="h-5 w-5 mr-2" />
-                            Facebook
-                        </a>
-                    </div>
+                        Email
+                    </label>
+                    <input
+                        id="email"
+                        type="email"
+                        v-model="email"
+                        required
+                        class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
+                        :class="{ 'border-red-500': errors.email }"
+                    />
+                    <p v-if="errors.email" class="text-red-500 text-sm mt-1">
+                        {{ errors.email }}
+                    </p>
                 </div>
-            </div>
+
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label
+                        for="password"
+                        class="block text-sm font-medium text-gray-300"
+                    >
+                        Password
+                    </label>
+                    <div class="relative">
+                        <input
+                            id="password"
+                            :type="showPassword ? 'text' : 'password'"
+                            v-model="password"
+                            required
+                            class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
+                            :class="{ 'border-red-500': errors.password }"
+                        />
+                        <button
+                            type="button"
+                            @click="togglePassword"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                        >
+                            <svg
+                                v-if="showPassword"
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                />
+                            </svg>
+                            <svg
+                                v-else
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                    <p v-if="errors.password" class="text-red-500 text-sm mt-1">
+                        {{ errors.password }}
+                    </p>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="flex items-center">
+                    <input
+                        id="terms"
+                        type="checkbox"
+                        v-model="acceptTerms"
+                        required
+                        class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-700 rounded bg-gray-900"
+                    />
+                    <label for="terms" class="ml-2 block text-sm text-gray-300">
+                        I agree to the
+                        <a href="#" class="text-white hover:underline">Terms</a>
+                        and
+                        <a href="#" class="text-white hover:underline"
+                            >Privacy Policy</a
+                        >
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    :disabled="loading"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                    <svg
+                        v-if="loading"
+                        class="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        />
+                        <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                    </svg>
+                    {{ loading ? 'Creating account...' : 'Create Account' }}
+                </button>
+
+                <!-- Sign In Link -->
+                <p class="text-center text-sm text-gray-400">
+                    Already have an account?
+                    <RouterLink
+                        to="/signin"
+                        class="font-medium text-white hover:underline"
+                    >
+                        Sign in
+                    </RouterLink>
+                </p>
+            </form>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
-const registerForm = ref({
+// Form fields
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const acceptTerms = ref(false)
+const showPassword = ref(false)
+const loading = ref(false)
+const errors = reactive({
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
 })
 
-const handleRegister = () => {
-    console.log('Register:', registerForm.value)
-    // Add your registration logic here
+// Toggle password visibility
+const togglePassword = () => {
+    showPassword.value = !showPassword.value
+}
+
+// Form submission
+const handleSubmit = async () => {
+    // Reset errors
+    errors.name = ''
+    errors.email = ''
+    errors.password = ''
+
+    // Basic validation
+    if (!name.value) {
+        errors.name = 'Name is required'
+        return
+    }
+
+    if (!email.value) {
+        errors.email = 'Email is required'
+        return
+    }
+
+    if (!password.value) {
+        errors.password = 'Password is required'
+        return
+    }
+
+    try {
+        loading.value = true
+        // Add your registration logic here
+        await new Promise(resolve => setTimeout(resolve, 1500)) // Simulate API call
+        console.log('Form submitted:', {
+            name: name.value,
+            email: email.value,
+            acceptTerms: acceptTerms.value,
+        })
+    } catch (error) {
+        console.error('Registration error:', error)
+    } finally {
+        loading.value = false
+    }
 }
 </script>
-
-<style>
-@keyframes blob {
-    0% {
-        transform: translate(0px, 0px) scale(1);
-    }
-    33% {
-        transform: translate(30px, -50px) scale(1.1);
-    }
-    66% {
-        transform: translate(-20px, 20px) scale(0.9);
-    }
-    100% {
-        transform: translate(0px, 0px) scale(1);
-    }
-}
-
-.animate-blob {
-    animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-    animation-delay: 2s;
-}
-</style>

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import WishlistView from '@/views/WishlistView.vue'
 import { SignInView, SignUpView } from '../views/auth'
 
 const router = createRouter({
@@ -9,6 +10,11 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomeView,
+        },
+        {
+            path: '/wishlist',
+            name: 'wishlist',
+            component: WishlistView,
         },
         {
             path: '/signin',
