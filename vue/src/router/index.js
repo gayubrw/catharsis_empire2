@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import WishlistView from '@/views/WishlistView.vue'
-import { SignInView, SignUpView } from '../views/auth'
+import { SignInView, SignUpView, ProfileView, ForgotPasswordView } from '../views/auth'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +25,16 @@ const router = createRouter({
             path: '/signup',
             name: 'signup',
             component: SignUpView,
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: ProfileView,
+        },
+        {
+            path: '/forgot-password',
+            name: 'forgot-password',
+            component: ForgotPasswordView,
         },
     ],
 })

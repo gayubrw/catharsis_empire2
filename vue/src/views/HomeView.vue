@@ -1,9 +1,10 @@
 <template>
-    <!-- <div
-        class="h-screen bg-cover bg-center"
-        style="background-image: url('/catharsis-hero.png')"
-    >
-    </div> -->
-
-    <div class="h-screen"></div>
+    <HeroSection />
+    <section id="card1" class="h-screen bg-black"></section>
+    <section id="card2" class="h-screen bg-black"></section>
+    <section id="card3" class="h-screen bg-black"></section>
 </template>
+
+<script setup>
+import HeroSection from '@/components/home/HeroSection.vue'
+</script>

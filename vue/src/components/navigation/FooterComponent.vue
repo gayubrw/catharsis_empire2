@@ -13,12 +13,22 @@ const navLinks = [
     <footer class="bg-black text-white px-6">
         <!-- Main Footer Content -->
         <div class="max-w-7xl mx-auto">
-            <!-- Top Row: Copyright and Social Media -->
-            <div class="flex justify-between items-center py-6">
-                <a href="/" class="text-white text-sm hover:text-gray-300"
-                    >© CATHARSIS EMPIRE 2024</a
+            <!-- Container -->
+            <div
+                class="flex flex-col lg:flex-row lg:justify-between lg:items-center py-6 space-y-6 lg:space-y-0"
+            >
+                <!-- Left Column: Copyright -->
+                <a
+                    href="/"
+                    class="text-white text-sm hover:text-gray-300 text-center md:text-left order-2 md:order-1"
                 >
-                <div class="flex gap-4 items-center">
+                    © CATHARSIS EMPIRE 2024
+                </a>
+
+                <!-- Center Column: Social Media Icons -->
+                <div
+                    class="flex gap-4 items-center justify-center md:justify-start order-1 md:order-2"
+                >
                     <a
                         href="https://www.instagram.com/catharsisempire"
                         target="_blank"
@@ -92,9 +102,11 @@ const navLinks = [
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="py-6">
-                    <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                <!-- Right Column: Navigation Links -->
+                <nav class="w-full md:w-auto order-3">
+                    <div
+                        class="grid grid-cols-2 md:flex md:flex-wrap gap-4 md:gap-x-6 md:gap-y-2 text-sm text-center md:text-left"
+                    >
                         <a
                             v-for="link in navLinks"
                             :key="link"
@@ -104,7 +116,7 @@ const navLinks = [
                             {{ link }}
                         </a>
                     </div>
-                </div>
+                </nav>
             </div>
         </div>
     </footer>

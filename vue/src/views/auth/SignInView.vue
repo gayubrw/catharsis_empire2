@@ -1,24 +1,17 @@
 <template>
-    <div class="w-full h-[43rem] bg-black">
-        <div
-            class="h-full w-full max-w-md mx-auto px-4 flex flex-col justify-center space-y-6"
-        >
+    <div class="w-full min-h-screen bg-black">
+        <div class="h-full w-full max-w-md mx-auto px-4 flex flex-col justify-center space-y-6">
             <!-- Header -->
             <div class="text-center">
-                <h1 class="text-2xl font-bold mb-2 text-white">Sign In</h1>
-                <p class="text-gray-400">
-                    Please enter your email and password
-                </p>
+                <h1 class="text-2xl font-bold mb-2 text-white">Welcome Back</h1>
+                <p class="text-gray-400">Sign in to your account to continue</p>
             </div>
 
             <!-- Form -->
-            <form @submit.prevent="handleSubmit" class="space-y-6">
+            <form @submit.prevent="handleSubmit" class="space-y-6" novalidate>
                 <!-- Email Field -->
                 <div class="space-y-2">
-                    <label
-                        for="email"
-                        class="block text-sm font-medium text-gray-300"
-                    >
+                    <label for="email" class="block text-sm font-medium text-gray-300">
                         Email
                     </label>
                     <input
@@ -26,36 +19,51 @@
                         type="email"
                         v-model="email"
                         required
+                        @blur="validateEmail"
+                        @input="validateEmailFormat"
+                        autocomplete="email"
+                        :aria-invalid="errors.email ? 'true' : 'false'"
+                        :aria-describedby="errors.email ? 'email-error' : ''"
                         class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
-                        :class="{ 'border-red-500': errors.email }"
+                        :class="{
+                            'border-red-500': errors.email,
+                            'border-green-500': email && !errors.email
+                        }"
                     />
-                    <p v-if="errors.email" class="text-red-500 text-sm mt-1">
+                    <p v-if="errors.email" id="email-error" class="text-red-500 text-sm mt-1">
                         {{ errors.email }}
                     </p>
                 </div>
 
                 <!-- Password Field -->
                 <div class="space-y-2">
-                    <label
-                        for="password"
-                        class="block text-sm font-medium text-gray-300"
-                    >
+                    <label for="password" class="block text-sm font-medium text-gray-300">
                         Password
                     </label>
-                    <div class="relative">
+                    <div class="relative group">
                         <input
                             id="password"
                             :type="showPassword ? 'text' : 'password'"
                             v-model="password"
                             required
+                            @blur="validatePassword"
+                            autocomplete="current-password"
+                            :aria-invalid="errors.password ? 'true' : 'false'"
+                            :aria-describedby="errors.password ? 'password-error' : ''"
                             class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
-                            :class="{ 'border-red-500': errors.password }"
+                            :class="{
+                                'border-red-500': errors.password,
+                                'border-green-500': password && !errors.password,
+                                'pr-12': true
+                            }"
                         />
                         <button
                             type="button"
                             @click="togglePassword"
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                            :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 focus:outline-none focus:text-white transition-colors"
                         >
+                            <span class="sr-only">{{ showPassword ? 'Hide password' : 'Show password' }}</span>
                             <svg
                                 v-if="showPassword"
                                 class="w-5 h-5"
@@ -92,16 +100,36 @@
                             </svg>
                         </button>
                     </div>
-                    <p v-if="errors.password" class="text-red-500 text-sm mt-1">
+                    <p v-if="errors.password" id="password-error" class="text-red-500 text-sm mt-1">
                         {{ errors.password }}
                     </p>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input
+                            id="remember-me"
+                            type="checkbox"
+                            v-model="rememberMe"
+                            class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-700 rounded bg-gray-900"
+                        />
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-300">
+                            Remember me
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <RouterLink to="/forgot-password" class="font-medium text-white hover:underline focus:outline-none focus:underline">
+                            Forgot password?
+                        </RouterLink>
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
                 <button
                     type="submit"
-                    :disabled="loading"
-                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    :disabled="loading || !isFormValid"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
                     <svg
                         v-if="loading"
@@ -132,19 +160,20 @@
                         Don't have an account?
                         <RouterLink
                             to="/signup"
-                            class="font-medium text-white hover:underline"
+                            class="font-medium text-white hover:underline focus:outline-none focus:underline"
                         >
                             Sign up
                         </RouterLink>
                     </p>
-                    <p class="text-center text-sm text-gray-400">
-                        <a
-                            href="#"
-                            class="font-medium text-white hover:underline"
-                        >
-                            Forgot password
-                        </a>
-                    </p>
+                </div>
+
+                <!-- Error Alert -->
+                <div
+                    v-if="submitError"
+                    class="bg-red-900/50 border border-red-500 text-red-300 px-4 py-3 rounded relative"
+                    role="alert"
+                >
+                    <span class="block sm:inline">{{ submitError }}</span>
                 </div>
             </form>
         </div>
@@ -152,18 +181,58 @@
 </template>
 
 <script setup>
+import { ref, reactive, computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ref, reactive } from 'vue'
 
 // Form fields
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const loading = ref(false)
+const rememberMe = ref(false)
+const submitError = ref('')
+
 const errors = reactive({
     email: '',
-    password: '',
+    password: ''
 })
+
+// Computed property for form validation
+const isFormValid = computed(() => {
+    return email.value &&
+           password.value &&
+           !errors.email &&
+           !errors.password
+})
+
+// Email validation
+const validateEmailFormat = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (email.value && !emailRegex.test(email.value)) {
+        errors.email = 'Please enter a valid email address'
+    } else {
+        errors.email = ''
+    }
+}
+
+const validateEmail = () => {
+    if (!email.value) {
+        errors.email = 'Email is required'
+    } else {
+        validateEmailFormat()
+    }
+}
+
+// Password validation
+const validatePassword = () => {
+    if (!password.value) {
+        errors.password = 'Password is required'
+    } else if (password.value.length < 8) {
+        errors.password = 'Password must be at least 8 characters'
+    } else {
+        errors.password = ''
+    }
+}
 
 // Toggle password visibility
 const togglePassword = () => {
@@ -172,18 +241,11 @@ const togglePassword = () => {
 
 // Form submission
 const handleSubmit = async () => {
-    // Reset errors
-    errors.email = ''
-    errors.password = ''
+    submitError.value = ''
+    validateEmail()
+    validatePassword()
 
-    // Basic validation
-    if (!email.value) {
-        errors.email = 'Email is required'
-        return
-    }
-
-    if (!password.value) {
-        errors.password = 'Password is required'
+    if (!isFormValid.value) {
         return
     }
 
@@ -191,12 +253,16 @@ const handleSubmit = async () => {
         loading.value = true
         // Add your authentication logic here
         await new Promise(resolve => setTimeout(resolve, 1500)) // Simulate API call
+
+        // Simulated successful login
         console.log('Form submitted:', {
             email: email.value,
             password: password.value,
+            rememberMe: rememberMe.value
         })
     } catch (error) {
         console.error('Login error:', error)
+        submitError.value = 'Invalid email or password. Please try again.'
     } finally {
         loading.value = false
     }
