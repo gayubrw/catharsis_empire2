@@ -3,7 +3,7 @@
     <div class="relative" @mouseenter="handleMouseEnter">
         <RouterLink
             :to="path"
-            class="text-gray-200 hover:text-white px-4 md:px-7 py-2 rounded-md text-base font-bold tracking-[0.25em] transition-colors duration-200 block"
+            class="text-gray-200 hover:text-white px-4 lg:px-6 py-2 rounded-md text-base font-bold tracking-[0.25em] transition-colors duration-200 block"
         >
             {{ text }}
         </RouterLink>

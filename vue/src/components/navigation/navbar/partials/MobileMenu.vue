@@ -29,7 +29,7 @@
             @click.self="isOpen = false"
         >
             <div
-                class="fixed top-0 right-0 w-full h-full max-w-sm bg-black/95 shadow-2xl transform transition-transform duration-300 ease-out"
+                class="fixed top-0 right-0 w-full h-full max-w-md bg-black/95 shadow-2xl transform transition-transform duration-300 ease-out"
                 :class="[isOpen ? 'translate-x-0' : 'translate-x-full']"
             >
                 <!-- Menu Container -->

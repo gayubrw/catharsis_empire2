@@ -4,10 +4,21 @@ export const menuConfig = [
         label: 'COLLECTIONS',
         path: '/collections',
         items: [
-            { id: '2024', label: '2024', path: '/collections/2024' },
-            { id: '2023', label: '2023', path: '/collections/2023' },
-            { id: '2022', label: '2022', path: '/collections/2022' },
-            { id: '2021', label: '2021', path: '/collections/2021' },
+            {
+                id: 'Project DYSTOPIAN',
+                label: 'Project DYSTOPIAN',
+                path: '/collections/project-dystopian',
+            },
+            {
+                id: 'Catharsis EMPIRE',
+                label: 'Catharsis EMPIRE',
+                path: '/collections/catharsis-empire',
+            },
+            {
+                id: 'Catharsis REBORN',
+                label: 'Catharsis REBORN',
+                path: '/collections/catharsis-reborn',
+            },
         ],
     },
     {
@@ -15,8 +26,16 @@ export const menuConfig = [
         label: 'CATEGORIES',
         path: '/categories',
         items: [
-            { id: 'top', label: 'TOP', path: '/categories/top' },
+            { id: 'shop all', label: 'SHOP ALL', path: '/categories/shop' },
+            { id: 'tops', label: 'TOPS', path: '/categories/tops' },
             { id: 'jumpers', label: 'JUMPERS', path: '/categories/jumpers' },
+            { id: 'jackets', label: 'JACKETS', path: '/categories/jackets' },
+            { id: 'bottoms', label: 'BOTTOMS', path: '/categories/bottoms' },
+            {
+                id: 'accessories',
+                label: 'ACCESSORIES',
+                path: '/categories/accessories',
+            },
         ],
     },
     {

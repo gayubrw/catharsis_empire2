@@ -1,5 +1,6 @@
 <template>
     <div class="w-full h-[43rem] bg-black">
+        <!-- Previous template code remains the same until the form element -->
         <div
             class="h-full w-full max-w-md mx-auto px-4 flex flex-col justify-center"
         >
@@ -9,6 +10,14 @@
                     Create Account
                 </h1>
                 <p class="text-gray-400">Fill in your details to register</p>
+            </div>
+
+            <!-- Alert for success/error messages -->
+            <div
+                v-if="alert.show"
+                :class="`mb-4 p-4 rounded-lg ${alert.type === 'success' ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'}`"
+            >
+                {{ alert.message }}
             </div>
 
             <!-- Form -->
@@ -183,6 +192,10 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+
+const router = useRouter()
 
 // Form fields
 const name = ref('')
@@ -197,9 +210,29 @@ const errors = reactive({
     password: '',
 })
 
+// Alert state
+const alert = reactive({
+    show: false,
+    message: '',
+    type: 'error', // 'error' or 'success'
+})
+
 // Toggle password visibility
 const togglePassword = () => {
     showPassword.value = !showPassword.value
+}
+
+// Show alert message
+const showAlert = (message, type = 'error') => {
+    alert.show = true
+    alert.message = message
+    alert.type = type
+
+    // Hide alert after 5 seconds
+    setTimeout(() => {
+        alert.show = false
+        alert.message = ''
+    }, 5000)
 }
 
 // Form submission
@@ -208,14 +241,15 @@ const handleSubmit = async () => {
     errors.name = ''
     errors.email = ''
     errors.password = ''
+    alert.show = false
 
     // Basic validation
-    if (!name.value) {
+    if (!name.value.trim()) {
         errors.name = 'Name is required'
         return
     }
 
-    if (!email.value) {
+    if (!email.value.trim()) {
         errors.email = 'Email is required'
         return
     }
@@ -225,17 +259,56 @@ const handleSubmit = async () => {
         return
     }
 
+    // Password strength validation
+    if (password.value.length < 8) {
+        errors.password = 'Password must be at least 8 characters long'
+        return
+    }
+
     try {
         loading.value = true
-        // Add your registration logic here
-        await new Promise(resolve => setTimeout(resolve, 1500)) // Simulate API call
-        console.log('Form submitted:', {
-            name: name.value,
-            email: email.value,
+
+        await axios.post(`${axios.defaults.baseURL}/auth/signup`, {
+            name: name.value.trim(),
+            email: email.value.trim(),
+            password: password.value,
             acceptTerms: acceptTerms.value,
         })
+
+        // Show success message
+        showAlert(
+            'Account created successfully! Redirecting to login...',
+            'success',
+        )
+
+        // Reset form
+        name.value = ''
+        email.value = ''
+        password.value = ''
+        acceptTerms.value = false
+
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+            router.push('/signin')
+        }, 2000)
     } catch (error) {
         console.error('Registration error:', error)
+
+        if (error.response) {
+            // Handle specific error messages from the backend
+            if (error.response.data.error === 'Email already registered') {
+                errors.email = 'This email is already registered'
+            } else {
+                showAlert(
+                    error.response.data.error ||
+                        'Registration failed. Please try again.',
+                )
+            }
+        } else {
+            showAlert(
+                'Network error. Please check your connection and try again.',
+            )
+        }
     } finally {
         loading.value = false
     }

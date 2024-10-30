@@ -3,6 +3,8 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import axios from 'axios'
+axios.defaults.baseURL = 'http://localhost:5000/api/v1'
 
 const app = createApp(App)
 
