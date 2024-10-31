@@ -61,14 +61,16 @@
                         <button
                             class="bg-white text-black py-3 flex items-center justify-center gap-2"
                         >
-                            <span class="material-icons">straighten</span>
                             SIZE GUIDE
                         </button>
                         <button
+                            @click="toggleWishlist"
                             class="bg-white text-black py-3 flex items-center justify-center gap-2"
                         >
-                            <span class="material-icons">favorite_border</span>
-                            ADD TO HITLIST
+                            <span v-if="isInWishlist"
+                                >REMOVE FROM WISHLIST</span
+                            >
+                            <span v-else>ADD TO WISHLIST</span>
                         </button>
                     </div>
 
@@ -94,16 +96,24 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { menuConfig } from './layouts/MenuConfig'
+import { useWishlistStore } from '@/stores/wishlistStore'
 
 export default {
     name: 'ProductDetail',
     setup() {
         const route = useRoute()
+        const wishlistStore = useWishlistStore()
         const product = ref(null)
         const selectedSize = ref(null)
+
+        const isInWishlist = computed(() => {
+            return product.value
+                ? wishlistStore.isInWishlist(product.value.id)
+                : false
+        })
 
         const formatPrice = price => {
             return price
@@ -124,6 +134,16 @@ export default {
             }
         })
 
+        const toggleWishlist = () => {
+            if (product.value) {
+                if (isInWishlist.value) {
+                    wishlistStore.removeFromWishlist(product.value.id)
+                } else {
+                    wishlistStore.addToWishlist(product.value)
+                }
+            }
+        }
+
         const selectSize = size => {
             selectedSize.value = size
         }
@@ -133,6 +153,8 @@ export default {
             formatPrice,
             selectedSize,
             selectSize,
+            toggleWishlist,
+            isInWishlist,
         }
     },
 }
