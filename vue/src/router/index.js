@@ -9,6 +9,8 @@ import {
 } from '../views/auth'
 // import ShopComponent from '../components/ShopComponent.vue' // Pastikan path ini sesuai
 import LayoutsShopComponent from '@/components/layouts/LayoutsShopComponent.vue'
+import ProductDetail from '../components/ProductDetail.vue'
+import Collections from '@/views/CollectionView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +51,11 @@ const router = createRouter({
             component: LayoutsShopComponent,
         },
         {
+            path: '/collections',
+            name: 'Collections',
+            component: Collections,
+        },
+        {
             path: '/collections/project-dystopian',
             name: 'project-dystopian',
             component: LayoutsShopComponent,
@@ -57,6 +64,16 @@ const router = createRouter({
             path: '/collections/catharsis-empire',
             name: 'catharsis-empire',
             component: LayoutsShopComponent,
+        },
+        {
+            path: '/collections/catharsis-reborn',
+            name: 'catharsis-reborn',
+            component: LayoutsShopComponent,
+        },
+        {
+            path: '/product/:id',
+            component: ProductDetail,
+            props: true,
         },
     ],
 })

@@ -1,6 +1,6 @@
 <template>
     <HeroSection />
-    <section id="card1" class="h-screen bg-black">
+    <section id="card1" class="h-auto bg-black">
         <LayoutsShopComponent />
     </section>
 </template>

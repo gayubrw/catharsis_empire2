@@ -5,18 +5,18 @@ export const menuConfig = [
         path: '/collections',
         items: [
             {
-                id: 'Project DYSTOPIAN',
-                label: 'Project DYSTOPIAN',
+                id: 'PROJECT DYSTOPIAN',
+                label: 'PROJECT DYSTOPIAN',
                 path: '/collections/project-dystopian',
             },
             {
-                id: 'Catharsis EMPIRE',
-                label: 'Catharsis EMPIRE',
+                id: 'CATHARSIS EMPIRE',
+                label: 'CATHARSIS EMPIRE',
                 path: '/collections/catharsis-empire',
             },
             {
-                id: 'Catharsis REBORN',
-                label: 'Catharsis REBORN',
+                id: 'CATHARSIS REBORN',
+                label: 'CATHARSIS REBORN',
                 path: '/collections/catharsis-reborn',
             },
         ],
