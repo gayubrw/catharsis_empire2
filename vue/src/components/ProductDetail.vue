@@ -31,6 +31,7 @@
                                 v-for="size in product?.sizes"
                                 :key="size"
                                 class="border border-white text-white px-4 py-2 hover:bg-white hover:text-black transition-colors"
+                                @click="selectSize(size)"
                             >
                                 {{ size }}
                             </button>
@@ -59,6 +60,7 @@
                     <!-- Additional Buttons -->
                     <div class="grid grid-cols-2 gap-4">
                         <button
+                            @click="openSizeGuide"
                             class="bg-white text-black py-3 flex items-center justify-center gap-2"
                         >
                             SIZE GUIDE
@@ -92,6 +94,23 @@
                 </div>
             </div>
         </div>
+
+        <!-- Size Guide Modal -->
+        <div
+            v-if="showSizeGuide"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        >
+            <div class="bg-white p-5 rounded">
+                <h2 class="text-black text-lg font-bold">Size Guide</h2>
+                <img :src="product?.sizeguide" alt="Size Guide" class="mt-4" />
+                <button
+                    @click="closeSizeGuide"
+                    class="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+                >
+                    Close
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -108,16 +127,13 @@ export default {
         const wishlistStore = useWishlistStore()
         const product = ref(null)
         const selectedSize = ref(null)
+        const showSizeGuide = ref(false)
 
         const isInWishlist = computed(() => {
             return product.value
                 ? wishlistStore.isInWishlist(product.value.id)
                 : false
         })
-
-        const formatPrice = price => {
-            return price
-        }
 
         onMounted(() => {
             const productId = route.params.id
@@ -148,13 +164,23 @@ export default {
             selectedSize.value = size
         }
 
+        const openSizeGuide = () => {
+            showSizeGuide.value = true
+        }
+
+        const closeSizeGuide = () => {
+            showSizeGuide.value = false
+        }
+
         return {
             product,
-            formatPrice,
             selectedSize,
             selectSize,
             toggleWishlist,
             isInWishlist,
+            showSizeGuide,
+            openSizeGuide,
+            closeSizeGuide,
         }
     },
 }

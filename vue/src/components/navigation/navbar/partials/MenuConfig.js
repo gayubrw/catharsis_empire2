@@ -16,6 +16,7 @@ export const menuConfig = [
                         categories: 'Tops',
                         image: '../dystopian1.jpg',
                         sizes: ['S', 'M', 'L', 'XL', '2XL'],
+                        sizeguide: '../sizeguidedystopian1.jpg',
                         description: 'Project DYSTOPIAN - Spectrum (Tees)...',
                     },
                     {
@@ -91,6 +92,7 @@ export const menuConfig = [
                         categories: 'Jackets',
                         image: '../catharsisempire1.jpg',
                         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+                        sizeguide: '../sizeguidecatharsisempire1.jpg',
                         description:
                             'Catharsis EMPIRE - Izanagiryū & Izanamiryū...',
                     },
