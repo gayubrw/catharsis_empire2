@@ -20,6 +20,10 @@ export const useWishlistStore = defineStore('wishlist', {
         isInWishlist(productId) {
             return this.items.some(item => item.id === productId)
         },
+
+        clearWishlist() {
+            this.items = []
+        },
     },
 
     persist: {

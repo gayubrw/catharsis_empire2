@@ -69,6 +69,7 @@ export const menuConfig = [
                         categories: 'Tops',
                         image: '../dystopian1.jpg',
                         sizes: ['S', 'M', 'L', 'XL', '2XL'],
+                        sizeguide: '../sizegguidedystopian1.jpg',
                         description: `Project DYSTOPIAN - Spectrum (Tees)
 
                                     Width x Length x Sleeve

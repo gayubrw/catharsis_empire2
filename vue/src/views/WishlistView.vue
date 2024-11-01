@@ -7,22 +7,45 @@
                 >
                     Wishlist
                 </h1>
+                <!-- Top Line -->
                 <div class="w-full h-[0.5px] bg-white"></div>
-                <div class="absolute right-0 top-4 flex items-center gap-3">
-                    <button class="text-white">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
+
+                <!-- Menu Button centered between lines -->
+                <div class="absolute right-0" style="top: calc(50% - 10px)">
+                    <div class="relative">
+                        <button
+                            @click="toggleDropdown"
+                            class="text-white hover:text-gray-300 transition-colors"
                         >
-                            <circle cx="12" cy="12" r="2" />
-                            <circle cx="12" cy="5" r="2" />
-                            <circle cx="12" cy="19" r="2" />
-                        </svg>
-                    </button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <circle cx="12" cy="12" r="2" />
+                                <circle cx="12" cy="5" r="2" />
+                                <circle cx="12" cy="19" r="2" />
+                            </svg>
+                        </button>
+                        <!-- Styled Dropdown Menu -->
+                        <div
+                            v-if="isDropdownOpen"
+                            class="absolute right-0 mt-4 w-60 bg-white"
+                            @click.stop
+                        >
+                            <button
+                                @click="clearWishlist"
+                                class="w-full px-6 py-3 text-left text-sm text-black tracking-[0.2em] uppercase font-light"
+                            >
+                                Clear List
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Bottom Line -->
                 <div class="w-full h-[0.5px] bg-white mt-12"></div>
             </div>
         </header>
@@ -62,14 +85,14 @@
                     <div
                         v-for="item in wishlistItems"
                         :key="item.id"
-                        class="group relative overflow-hidden"
+                        class="group relative"
                     >
                         <!-- Image Container -->
-                        <div class="relative aspect-[3/4] overflow-hidden">
+                        <div class="relative w-full overflow-hidden">
                             <img
                                 :src="item.image"
                                 :alt="item.name"
-                                class="w-full h-full object-cover"
+                                class="w-full h-auto"
                             />
 
                             <!-- Overlay with details (visible on hover) -->
@@ -94,13 +117,13 @@
                                 >
                                     <button
                                         @click="viewProduct(item.id)"
-                                        class="w-full bg-white text-black py-2 hover:bg-gray-100 transition-colors text-sm uppercase"
+                                        class="w-full bg-white text-black py-2 hover:bg-gray-100 transition-colors text-sm uppercase tracking-wider"
                                     >
                                         View Details
                                     </button>
                                     <button
                                         @click="removeFromWishlist(item.id)"
-                                        class="w-full bg-red-600 text-white py-2 hover:bg-red-700 transition-colors text-sm uppercase"
+                                        class="w-full bg-red-600 text-white py-2 hover:bg-red-700 transition-colors text-sm uppercase tracking-wider"
                                     >
                                         Remove
                                     </button>
@@ -120,15 +143,40 @@
 <script>
 import { useRouter } from 'vue-router'
 import { useWishlistStore } from '@/stores/wishlistStore'
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 
 export default {
     name: 'WishlistPage',
     setup() {
         const router = useRouter()
         const wishlistStore = useWishlistStore()
+        const isDropdownOpen = ref(false)
 
         const wishlistItems = computed(() => wishlistStore.items)
+
+        const handleClickOutside = () => {
+            if (isDropdownOpen.value) {
+                isDropdownOpen.value = false
+            }
+        }
+
+        onMounted(() => {
+            document.addEventListener('click', handleClickOutside)
+        })
+
+        onUnmounted(() => {
+            document.removeEventListener('click', handleClickOutside)
+        })
+
+        const toggleDropdown = event => {
+            event.stopPropagation()
+            isDropdownOpen.value = !isDropdownOpen.value
+        }
+
+        const clearWishlist = () => {
+            wishlistStore.clearWishlist()
+            isDropdownOpen.value = false
+        }
 
         const goToDashboard = () => {
             router.push('/')
@@ -144,6 +192,9 @@ export default {
 
         return {
             wishlistItems,
+            isDropdownOpen,
+            toggleDropdown,
+            clearWishlist,
             goToDashboard,
             viewProduct,
             removeFromWishlist,
