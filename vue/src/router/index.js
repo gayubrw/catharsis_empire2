@@ -1,16 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import WishlistView from '@/views/WishlistView.vue'
-import {
-    SignInView,
-    SignUpView,
-    ProfileView,
-    ForgotPasswordView,
-} from '../views/auth'
+import { SignInView, SignUpView, ForgotPasswordView } from '../views/auth'
+import ProfileView from '../views/ProfileView.vue'
 // import ShopComponent from '../components/ShopComponent.vue' // Pastikan path ini sesuai
 import LayoutsShopComponent from '@/components/layouts/LayoutsShopComponent.vue'
 import ProductDetail from '../components/ProductDetail.vue'
 import Collections from '@/views/CollectionView.vue'
+import AddressComponent from '../components/AddressComponent.vue'
+import ProfileComponent from '../components/ProfileComponent.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,9 +34,22 @@ const router = createRouter({
             component: SignUpView,
         },
         {
-            path: '/profile',
-            name: 'profile',
+            path: '/',
             component: ProfileView,
+            children: [
+                {
+                    path: 'profile',
+                    component: ProfileComponent,
+                },
+                {
+                    path: 'address',
+                    component: AddressComponent,
+                },
+                {
+                    path: '',
+                    redirect: '/profile-setting',
+                },
+            ],
         },
         {
             path: '/forgot-password',

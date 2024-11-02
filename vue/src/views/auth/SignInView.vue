@@ -1,6 +1,8 @@
 <template>
     <div class="w-full min-h-screen bg-black">
-        <div class="h-full w-full max-w-md mx-auto px-4 flex flex-col justify-center space-y-6">
+        <div
+            class="h-full w-full max-w-md mx-auto px-4 flex flex-col justify-center space-y-6"
+        >
             <!-- Header -->
             <div class="text-center">
                 <h1 class="text-2xl font-bold mb-2 text-white">Welcome Back</h1>
@@ -11,7 +13,10 @@
             <form @submit.prevent="handleSubmit" class="space-y-6" novalidate>
                 <!-- Email Field -->
                 <div class="space-y-2">
-                    <label for="email" class="block text-sm font-medium text-gray-300">
+                    <label
+                        for="email"
+                        class="block text-sm font-medium text-gray-300"
+                    >
                         Email
                     </label>
                     <input
@@ -27,17 +32,24 @@
                         class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
                         :class="{
                             'border-red-500': errors.email,
-                            'border-green-500': email && !errors.email
+                            'border-green-500': email && !errors.email,
                         }"
                     />
-                    <p v-if="errors.email" id="email-error" class="text-red-500 text-sm mt-1">
+                    <p
+                        v-if="errors.email"
+                        id="email-error"
+                        class="text-red-500 text-sm mt-1"
+                    >
                         {{ errors.email }}
                     </p>
                 </div>
 
                 <!-- Password Field -->
                 <div class="space-y-2">
-                    <label for="password" class="block text-sm font-medium text-gray-300">
+                    <label
+                        for="password"
+                        class="block text-sm font-medium text-gray-300"
+                    >
                         Password
                     </label>
                     <div class="relative group">
@@ -49,21 +61,28 @@
                             @blur="validatePassword"
                             autocomplete="current-password"
                             :aria-invalid="errors.password ? 'true' : 'false'"
-                            :aria-describedby="errors.password ? 'password-error' : ''"
+                            :aria-describedby="
+                                errors.password ? 'password-error' : ''
+                            "
                             class="w-full px-4 py-3 rounded-lg border bg-zinc-900 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
                             :class="{
                                 'border-red-500': errors.password,
-                                'border-green-500': password && !errors.password,
-                                'pr-12': true
+                                'border-green-500':
+                                    password && !errors.password,
+                                'pr-12': true,
                             }"
                         />
                         <button
                             type="button"
                             @click="togglePassword"
-                            :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                            :aria-label="
+                                showPassword ? 'Hide password' : 'Show password'
+                            "
                             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 focus:outline-none focus:text-white transition-colors"
                         >
-                            <span class="sr-only">{{ showPassword ? 'Hide password' : 'Show password' }}</span>
+                            <span class="sr-only">{{
+                                showPassword ? 'Hide password' : 'Show password'
+                            }}</span>
                             <svg
                                 v-if="showPassword"
                                 class="w-5 h-5"
@@ -100,7 +119,11 @@
                             </svg>
                         </button>
                     </div>
-                    <p v-if="errors.password" id="password-error" class="text-red-500 text-sm mt-1">
+                    <p
+                        v-if="errors.password"
+                        id="password-error"
+                        class="text-red-500 text-sm mt-1"
+                    >
                         {{ errors.password }}
                     </p>
                 </div>
@@ -114,12 +137,18 @@
                             v-model="rememberMe"
                             class="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-700 rounded bg-gray-900"
                         />
-                        <label for="remember-me" class="ml-2 block text-sm text-gray-300">
+                        <label
+                            for="remember-me"
+                            class="ml-2 block text-sm text-gray-300"
+                        >
                             Remember me
                         </label>
                     </div>
                     <div class="text-sm">
-                        <RouterLink to="/forgot-password" class="font-medium text-white hover:underline focus:outline-none focus:underline">
+                        <RouterLink
+                            to="/forgot-password"
+                            class="font-medium text-white hover:underline focus:outline-none focus:underline"
+                        >
                             Forgot password?
                         </RouterLink>
                     </div>
@@ -194,15 +223,12 @@ const submitError = ref('')
 
 const errors = reactive({
     email: '',
-    password: ''
+    password: '',
 })
 
 // Computed property for form validation
 const isFormValid = computed(() => {
-    return email.value &&
-           password.value &&
-           !errors.email &&
-           !errors.password
+    return email.value && password.value && !errors.email && !errors.password
 })
 
 // Email validation
@@ -258,7 +284,7 @@ const handleSubmit = async () => {
         console.log('Form submitted:', {
             email: email.value,
             password: password.value,
-            rememberMe: rememberMe.value
+            rememberMe: rememberMe.value,
         })
     } catch (error) {
         console.error('Login error:', error)
