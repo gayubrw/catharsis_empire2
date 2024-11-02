@@ -20,7 +20,7 @@ const navLinks = [
                 <!-- Left Column: Copyright -->
                 <a
                     href="/"
-                    class="text-white text-sm hover:text-gray-300 text-center md:text-left order-2 md:order-1"
+                    class="text-white text-sm hover:text-gray-300 text-center md:text-left order-2 md:order-1 tracking-[0.1em]"
                 >
                     © CATHARSIS EMPIRE 2024
                 </a>
@@ -105,7 +105,7 @@ const navLinks = [
                 <!-- Right Column: Navigation Links -->
                 <nav class="w-full md:w-auto order-3">
                     <div
-                        class="grid grid-cols-2 md:flex md:flex-wrap gap-4 md:gap-x-6 md:gap-y-2 text-sm text-center md:text-left"
+                        class="grid grid-cols-2 md:flex md:flex-wrap gap-4 md:gap-x-6 md:gap-y-2 text-sm text-center md:text-left tracking-[0.1em]"
                     >
                         <a
                             v-for="link in navLinks"

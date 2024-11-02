@@ -272,3 +272,24 @@ export const menuConfig = [
         ],
     },
 ]
+
+export const cartState = {
+    items: [
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 2,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+    ],
+}

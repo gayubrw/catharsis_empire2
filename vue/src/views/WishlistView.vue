@@ -62,7 +62,7 @@
                             Love It? Add To My Wishlist
                         </h2>
                         <p
-                            class="text-sm text-gray-300 leading-relaxed mb-10 max-w-xl mx-auto"
+                            class="text-sm text-gray-300 leading-relaxed mb-10 max-w-xl mx-auto tracking-[0.2em]"
                         >
                             My Wishlist allows you to keep track of all of your
                             favorites and shopping activity whether you're on
@@ -70,7 +70,7 @@
                         </p>
                         <button
                             @click="goToDashboard"
-                            class="bg-white text-black px-8 py-2 text-sm hover:bg-gray-100 transition-colors uppercase tracking-wider"
+                            class="bg-white text-black px-8 py-2 text-sm hover:bg-gray-100 transition-colors uppercase tracking-[0.2em]"
                         >
                             Continue Shopping
                         </button>
