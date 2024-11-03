@@ -1,3 +1,5 @@
+import { reactive } from 'vue'
+
 export const menuConfig = [
     {
         name: 'ShopComponent',
@@ -11,15 +13,9 @@ export const menuConfig = [
                         categories: 'Accessories',
                         image: '../dystopian4.jpg',
                         sizes: ['Mid Calf', 'Quarter'],
-                        description: `Project DYSTOPIAN - Umbra (Socks)
-
-                                    One size
-
-                                    - Mid Calf
-                                    - Quarter
-
-                                    *Everything that the Empire constructs have passed prudent QUALITY CHECKs. However, in extreme cases where you found errors in our creation, please don't hesitate to submit your complaints to our admin before you rate our masterpieces.`,
+                        description: `Project DYSTOPIAN - Umbra (Socks)\n\nOne size\n\n- Mid Calf\n- Quarter\n\n*Everything that the Empire constructs have passed prudent QUALITY CHECKs...`,
                     },
+
                     {
                         id: 'dystopian-3',
                         name: 'Project DYSTOPIAN - Mutation',
@@ -375,3 +371,74 @@ export const menuConfig = [
         },
     },
 ]
+
+export const cartState = reactive({
+    items: [],
+    addItem(product, selectedSize) {
+        const existingItem = this.items.find(
+            item => item.id === product.id && item.selectedSize === selectedSize
+        )
+
+        if (existingItem) {
+            existingItem.quantity++
+        } else {
+            this.items.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                selectedSize: selectedSize,
+                quantity: 1
+            })
+        }
+    },
+    removeItem(itemId) {
+        const index = this.items.findIndex(item => item.id === itemId)
+        if (index > -1) {
+            this.items.splice(index, 1)
+        }
+    },
+    updateQuantity(itemId, quantity) {
+        const item = this.items.find(item => item.id === itemId)
+        if (item && quantity > 0) {
+            item.quantity = quantity
+        }
+    },
+    clearCart() {
+        this.items = []
+    },
+    getTotal() {
+        return this.items.reduce((total, item) => {
+            const price = parseInt(item.price.replace(/[^\d]/g, ''))
+            return total + (price * item.quantity)
+        }, 0)
+    }
+})
+
+// Search State Management
+export const searchState = reactive({
+    query: '',
+    results: [],
+    filters: {
+        category: '',
+        priceRange: null,
+        size: ''
+    },
+    setQuery(newQuery) {
+        this.query = newQuery
+        this.updateResults()
+    },
+    updateResults() {
+        // Implementasi logika pencarian berdasarkan query dan filter
+        // Bisa menggunakan data dari menuConfig
+    },
+    clearSearch() {
+        this.query = ''
+        this.results = []
+        this.filters = {
+            category: '',
+            priceRange: null,
+            size: ''
+        }
+    }
+})
