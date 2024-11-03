@@ -9,6 +9,7 @@ import Collections from '@/views/CollectionView.vue'
 import AddressComponent from '../components/AddressComponent.vue'
 import ProfileComponent from '../components/ProfileComponent.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
+import TransactionView from '@/views/TransactionView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -90,6 +91,12 @@ const router = createRouter({
             path: '/checkout',
             name: 'checkout',
             component: CheckoutView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/transaction',
+            name: 'Transaction',
+            component: TransactionView,
             meta: { requiresAuth: true }
         },
     ],

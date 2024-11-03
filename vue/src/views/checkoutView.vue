@@ -32,23 +32,98 @@
                         </div>
                     </div>
 
-                    <!-- Shipping Section -->
+                    <!-- Shipping Section with modified delivery options -->
                     <div class="border border-white/10 rounded p-4">
                         <h2 class="text-sm text-white/60 mb-4">Delivery</h2>
-                        <div class="w-full flex items-center justify-between bg-black border border-white/10 rounded px-4 py-3 text-white hover:border-white/20">
-                            <div class="flex items-center space-x-2">
-                                <input type="radio" name="delivery" checked class="text-white" />
-                                <span>Ship</span>
+                        <!-- Profile Data Option -->
+                        <button 
+                            class="w-full mb-4"
+                            @click="setDeliveryOption('profile')"
+                        >
+                            <div 
+                                class="w-full flex items-center justify-between bg-black border border-white/10 rounded px-4 py-3 text-white hover:border-white/20"
+                                :class="{ 'border-white/30': deliveryOption === 'profile' }"
+                            >
+                                <div class="flex items-center space-x-2">
+                                    <input 
+                                        type="radio" 
+                                        name="delivery" 
+                                        :checked="deliveryOption === 'profile'"
+                                        class="text-white" 
+                                    />
+                                    <span>Use Profile Data</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-white/60" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 text-white/60" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
-                                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                        </button>
+
+                        <!-- Manual Fill Option -->
+                        <button 
+                            class="w-full"
+                            @click="setDeliveryOption('manual')"
+                        >
+                            <div 
+                                class="w-full flex items-center justify-between bg-black border border-white/10 rounded px-4 py-3 text-white hover:border-white/20"
+                                :class="{ 'border-white/30': deliveryOption === 'manual' }"
+                            >
+                                <div class="flex items-center space-x-2">
+                                    <input 
+                                        type="radio" 
+                                        name="delivery" 
+                                        :checked="deliveryOption === 'manual'"
+                                        class="text-white" 
+                                    />
+                                    <span>Fill Manually</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-white/60" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- Profile Addresses Selection (shown when profile option is selected) -->
+                        <div v-if="deliveryOption === 'profile' && savedAddresses.length > 0" class="mt-4 space-y-4">
+                            <div v-for="(address, index) in savedAddresses" :key="index">
+                                <button 
+                                    class="w-full text-left"
+                                    @click="selectAddress(index)"
+                                >
+                                    <div 
+                                        class="p-4 border rounded hover:border-white/20 transition-colors"
+                                        :class="selectedAddressIndex === index ? 'border-white/30 bg-white/5' : 'border-white/10'"
+                                    >
+                                        <div class="flex items-center space-x-3">
+                                            <input 
+                                                type="radio" 
+                                                name="address" 
+                                                :checked="selectedAddressIndex === index"
+                                                class="text-white" 
+                                            />
+                                            <div class="flex-1">
+                                                <p class="text-white font-medium">{{ address.name }}</p>
+                                                <p class="text-white/60 text-sm mt-1">{{ address.address }}</p>
+                                                <p class="text-white/60 text-sm">
+                                                    {{ address.subdistrict }}, {{ address.city }}, {{ address.district }}
+                                                </p>
+                                                <p class="text-white/60 text-sm">
+                                                    {{ address.province }}, {{ address.postalCode }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Address Form -->
-                        <div class="space-y-4 mt-4">
+                        <!-- Manual Address Form (shown when manual option is selected) -->
+                        <div v-if="deliveryOption === 'manual'" class="space-y-4 mt-4">
                             <!-- Country Selection -->
                             <select 
                                 v-model="formData.country" 
@@ -140,23 +215,33 @@
                 <div class="hidden lg:block absolute left-1/2 top-100 bottom-0 w-px bg-white/10 transform -translate-x-1/2"></div>
 
                 <!-- Right Column - Order Summary -->
-                <div class="lg:sticky lg:top-8 h-fit pl-12 mt-[46px]"> <!-- Tambahkan mt-[46px] untuk menurunkan sejajar dengan form -->
-                    <div class="border border-white/10 rounded p-6">
+                <div class="lg:sticky lg:top-8 h-fit mt-[46px]"> <!-- Tambahkan mt-[46px] untuk menurunkan sejajar dengan form -->
+                    <div class="border border-white/10 rounded p-5">
                         <!-- Cart Items -->
-                        <div class="space-y-4 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                            <div v-for="item in cartItems" :key="item.id" class="flex items-center gap-4">
+                        <div class="space-y-4 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent p-1">
+                            <div v-for="item in cartItems" :key="item.id" class="flex gap-4">
+                                <!-- Product Image -->
                                 <div class="relative w-20 h-20 bg-white/5 rounded overflow-hidden">
                                     <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
-                                    <span class="absolute top-1 right-1 w-5 h-5 bg-white text-black text-xs font-medium rounded-full flex items-center justify-center">
-                                        {{ item.quantity }}
-                                    </span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="text-white text-sm font-medium truncate">{{ item.name }}</h3>
-                                    <p class="text-white/60 text-sm">{{ item.selectedSize }}</p>
-                                </div>
-                                <div class="text-white text-sm font-medium whitespace-nowrap">
-                                    {{ formatPrice(calculateItemTotal(item)) }}
+                                
+                                <!-- Product Details -->
+                                <div class="flex-1 min-w-0 flex justify-between">
+                                    <!-- Left side: Name, Size, Quantity -->
+                                    <div class="flex flex-col">
+                                        <h3 class="text-white text-sm font-medium truncate">{{ item.name }}</h3>
+                                        <p class="text-white/60 text-sm">{{ item.selectedSize }}</p>
+                                    </div>
+                                    
+                                    <!-- Right side: Price calculation -->
+                                    <div class="text-right">
+                                        <p class="text-white/60 text-sm">
+                                            {{ item.quantity }} x {{ formatPrice(parseInt(item.price.replace(/[^\d]/g, ''))) }}
+                                        </p>
+                                        <p class="text-white text-sm font-medium mt-1">
+                                            {{ formatPrice(calculateItemTotal(item)) }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -202,24 +287,100 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { cartState } from '@/components/navigation/navbar/partials/MenuConfig'
 
 const router = useRouter()
+const deliveryOption = ref('profile') // Default to profile option
+const selectedAddressIndex = ref(0) // Tambahkan ini
+const savedAddresses = ref([]) // Tambahkan ini
 
 const formData = ref({
     email: '',
-    firstName: '',
-    lastName: '',
+    name: '',
     address: '',
-    addressDetail: '',
+    subdistrict: '',
     city: '',
+    district: '',
     province: '',
     postalCode: '',
-    phone: '',
     country: 'ID'
 })
+
+// Simulated function to fetch profile data - replace with actual API call
+const fetchProfileData = async () => {
+    try {
+        // Simulate API call - replace with actual API endpoint
+        // const response = await fetch('/api/addresses')
+        // const data = await response.json()
+        
+        // Simulated multiple addresses
+        savedAddresses.value = [
+            {
+                name: 'Phill Less',
+                address: 'Le Grande Driving Range',
+                subdistrict: 'Kenjeran',
+                city: 'Surabaya',
+                district: 'Surabaya Timur',
+                province: 'Jawa Timur',
+                postalCode: '12520'
+            },
+            {
+                name: 'Om Cali',
+                address: 'Jl. BDG, Kenjeran dan Graha',
+                subdistrict: 'Bukit Darmo',
+                city: 'Surabaya',
+                district: 'Surabaya Barat',
+                province: 'Jawa Timur',
+                postalCode: '180704'
+            }
+        ]
+
+        // If profile option is selected, populate form data with first address
+        if (deliveryOption.value === 'profile') {
+            selectAddress(0)
+        }
+    } catch (error) {
+        console.error('Error fetching profile data:', error)
+    }
+}
+
+const selectAddress = (index) => {
+    selectedAddressIndex.value = index
+    const selectedAddress = savedAddresses.value[index]
+    
+    formData.value = {
+        ...formData.value,
+        name: selectedAddress.name,
+        address: selectedAddress.address,
+        subdistrict: selectedAddress.subdistrict,
+        city: selectedAddress.city,
+        district: selectedAddress.district,
+        province: selectedAddress.province,
+        postalCode: selectedAddress.postalCode
+    }
+}
+
+const setDeliveryOption = (option) => {
+    deliveryOption.value = option
+    if (option === 'profile' && savedAddresses.value.length > 0) {
+        selectAddress(selectedAddressIndex.value)
+    } else if (option === 'manual') {
+        // Reset form data when switching to manual
+        formData.value = {
+            email: formData.value.email, // Preserve email
+            name: '',
+            address: '',
+            subdistrict: '',
+            city: '',
+            district: '',
+            province: '',
+            postalCode: '',
+            country: 'ID'
+        }
+    }
+}
 
 const provinces = [
     { value: 'jawa-barat', label: 'Jawa Barat' },
@@ -249,11 +410,17 @@ const calculateItemTotal = (item) => {
 
 const formatPrice = (price) => `Rp${price.toLocaleString()}`
 
+// Fetch profile data when component mounts
+onMounted(() => {
+    fetchProfileData()
+})
+
 // Redirect if cart is empty
 if (!hasItems.value) {
     console.warn('Cart is empty')
 }
 </script>
+
 
 <style scoped>
 input[type="radio"], 
@@ -300,7 +467,7 @@ select option {
         content: '';
         position: absolute;
         left: 50%;
-        top: 0;
+        top: ;
         bottom: 0;
         width: 1px;
         background-color: rgba(255, 255, 255, 0.1);
