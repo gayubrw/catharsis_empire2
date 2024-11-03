@@ -49,6 +49,7 @@
 
                         <!-- Address Form -->
                         <div class="space-y-4 mt-4">
+                            <!-- Country Selection -->
                             <select 
                                 v-model="formData.country" 
                                 class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white"
@@ -56,21 +57,15 @@
                                 <option value="ID">Indonesia</option>
                             </select>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <input
-                                    type="text"
-                                    placeholder="First name"
-                                    v-model="formData.firstName"
-                                    class="bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Last name"
-                                    v-model="formData.lastName"
-                                    class="bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
-                                />
-                            </div>
+                            <!-- Name -->
+                            <input
+                                type="text"
+                                placeholder="Full Name"
+                                v-model="formData.name"
+                                class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
+                            />
 
+                            <!-- Address -->
                             <input
                                 type="text"
                                 placeholder="Address"
@@ -78,20 +73,30 @@
                                 class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
                             />
 
-                            <input
-                                type="text"
-                                placeholder="Apartment, suite, etc. (optional)"
-                                v-model="formData.addressDetail"
-                                class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
-                            />
-
+                            <!-- Subdistrict, City, District Grid -->
                             <div class="grid grid-cols-3 gap-4">
+                                <input
+                                    type="text"
+                                    placeholder="Subdistrict"
+                                    v-model="formData.subdistrict"
+                                    class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
+                                />
                                 <input
                                     type="text"
                                     placeholder="City"
                                     v-model="formData.city"
                                     class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
                                 />
+                                <input
+                                    type="text"
+                                    placeholder="District"
+                                    v-model="formData.district"
+                                    class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
+                                />
+                            </div>
+
+                            <!-- Province and Postal Code -->
+                            <div class="grid grid-cols-2 gap-4">
                                 <select
                                     v-model="formData.province"
                                     class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white"
@@ -103,18 +108,11 @@
                                 </select>
                                 <input
                                     type="text"
-                                    placeholder="Postal code"
+                                    placeholder="Postal Code"
                                     v-model="formData.postalCode"
                                     class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
                                 />
                             </div>
-
-                            <input
-                                type="tel"
-                                placeholder="Phone"
-                                v-model="formData.phone"
-                                class="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/40"
-                            />
                         </div>
                     </div>
 
