@@ -13,7 +13,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- Left Column - Product Info -->
+                <!-- Right Column - Product Info -->
                 <div class="space-y-6">
                     <h1 class="text-white text-5xl font-bold">
                         {{ product?.name }}
@@ -26,11 +26,16 @@
                     <!-- Size Selection -->
                     <div class="space-y-4">
                         <p class="text-white text-sm">SIZE</p>
-                        <div class="flex gap-4">
+                        <div class="flex gap-4 flex-wrap">
                             <button
                                 v-for="size in product?.sizes"
                                 :key="size"
                                 class="border border-white text-white px-4 py-2 hover:bg-white hover:text-black transition-colors"
+                                :class="
+                                    selectedSize === size
+                                        ? 'bg-white text-black'
+                                        : ''
+                                "
                                 @click="selectSize(size)"
                             >
                                 {{ size }}
@@ -99,13 +104,11 @@
                                     d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
                                 />
                             </svg>
-                            <span class="font-medium">
-                                {{
-                                    isInWishlist
-                                        ? 'REMOVE FROM WISHLIST'
-                                        : 'ADD TO WISHLIST'
-                                }}
-                            </span>
+                            <span class="font-medium">{{
+                                isInWishlist
+                                    ? 'REMOVE FROM WISHLIST'
+                                    : 'ADD TO WISHLIST'
+                            }}</span>
                         </button>
                     </div>
 
@@ -117,13 +120,24 @@
                     </div>
                 </div>
 
-                <!-- Right Column - Product Image -->
-                <div class="product-image">
-                    <img
-                        :src="product?.image"
-                        :alt="product?.name"
-                        class="w-full h-auto"
-                    />
+                <!-- Left Column - Scrollable Product Images -->
+                <div class="relative">
+                    <div
+                        class="sticky top-8 image-gallery space-y-4 max-h-screen overflow-y-auto pr-4"
+                    >
+                        <div
+                            v-for="(image, index) in productImages"
+                            :key="index"
+                            class="w-full"
+                        >
+                            <img
+                                :src="image"
+                                :alt="`${product?.name} view ${index + 1}`"
+                                class="w-full h-auto"
+                                loading="lazy"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,7 +145,7 @@
         <!-- Size Guide Modal -->
         <div
             v-if="showSizeGuide"
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
             <div class="bg-white p-5 rounded">
                 <h2 class="text-black text-lg font-bold">Size Guide</h2>
@@ -161,6 +175,21 @@ export default {
         const product = ref(null)
         const selectedSize = ref(null)
         const showSizeGuide = ref(false)
+
+        // Simulate multiple product images
+        const productImages = computed(() => {
+            if (!product.value) return []
+            // In a real app, these would come from your API
+            // For now, we'll duplicate the main image to simulate multiple views
+            return [
+                product.value.image,
+                product.value.image,
+                product.value.image,
+                product.value.image,
+                product.value.image,
+                product.value.image,
+            ]
+        })
 
         const isInWishlist = computed(() => {
             return product.value
@@ -214,7 +243,46 @@ export default {
             showSizeGuide,
             openSizeGuide,
             closeSizeGuide,
+            productImages,
         }
     },
 }
 </script>
+
+<style scoped>
+.image-gallery::-webkit-scrollbar {
+    width: 4px;
+}
+
+.image-gallery::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.image-gallery::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+}
+
+.image-gallery::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Smooth scrolling behavior */
+.image-gallery {
+    scroll-behavior: smooth;
+}
+
+/* Hide scrollbar for mobile */
+@media (max-width: 768px) {
+    .image-gallery {
+        padding-right: 0;
+    }
+    .image-gallery::-webkit-scrollbar {
+        display: none;
+    }
+    .image-gallery {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+</style>
