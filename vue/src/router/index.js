@@ -9,6 +9,7 @@ import ProductDetail from '../components/ProductDetail.vue'
 import Collections from '@/views/CollectionView.vue'
 import AddressComponent from '../components/AddressComponent.vue'
 import ProfileComponent from '../components/ProfileComponent.vue'
+import CartDetails from '@/components/CartDetails.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +61,11 @@ const router = createRouter({
             path: '/categories/shop',
             name: 'Shop',
             component: LayoutsShopComponent,
+        },
+        {
+            path: '/cartdetails',
+            name: 'CartDetails',
+            component: CartDetails,
         },
         {
             path: '/collections',

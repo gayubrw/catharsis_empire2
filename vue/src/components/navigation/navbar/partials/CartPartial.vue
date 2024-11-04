@@ -137,7 +137,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Quantity Controls - No Changes -->
+                                        <!-- Quantity Controls -->
                                         <div
                                             class="mt-2 flex justify-between items-center"
                                         >
@@ -264,15 +264,25 @@
                                     formatPrice(subtotal)
                                 }}</span>
                             </div>
-                            <div class="flex justify-between text-sm mb-6">
+                            <div class="flex justify-between text-sm mb-2">
                                 <span class="text-gray-400">Shipping</span>
                                 <span class="text-white font-medium">Free</span>
+                            </div>
+                            <!-- Modified Cart Details Link -->
+                            <div class="flex justify-end mb-6">
+                                <router-link
+                                    to="/cartdetails"
+                                    class="text-gray-400 tracking-[0.1em] hover:text-gray-300 text-sm font-medium transition-colors"
+                                    @click="updateCart(false)"
+                                >
+                                    Cart Details →
+                                </router-link>
                             </div>
                             <button
                                 class="w-full py-3 rounded-lg transition-colors"
                                 :class="[
                                     cartState.items.length > 0
-                                        ? 'bg-white text-black hover:bg-white/90'
+                                        ? 'bg-white text-black tracking-[0.2em] hover:bg-white/90'
                                         : 'bg-white/5 text-gray-400 border border-white/10 cursor-not-allowed',
                                 ]"
                                 :disabled="cartState.items.length === 0"

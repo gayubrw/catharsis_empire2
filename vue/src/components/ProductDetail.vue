@@ -276,13 +276,11 @@ export default {
 @media (max-width: 768px) {
     .image-gallery {
         padding-right: 0;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
     .image-gallery::-webkit-scrollbar {
         display: none;
-    }
-    .image-gallery {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
     }
 }
 </style>

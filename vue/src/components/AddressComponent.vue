@@ -5,69 +5,126 @@
         </h2>
 
         <form @submit.prevent="handleSubmit" class="space-y-6">
+            <!-- Name -->
+            <div class="space-y-2">
+                <label
+                    for="name"
+                    class="block text-sm font-medium text-gray-300"
+                >
+                    Name
+                </label>
+                <input
+                    id="name"
+                    type="text"
+                    v-model="name"
+                    required
+                    class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+            </div>
+
             <!-- Street Address -->
             <div class="space-y-2">
                 <label
-                    for="street"
+                    for="street_address"
                     class="block text-sm font-medium text-gray-300"
                 >
                     Street Address
                 </label>
                 <input
-                    id="street"
+                    id="street_address"
                     type="text"
-                    v-model="street"
+                    v-model="street_address"
                     required
                     class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
             </div>
 
-            <!-- City -->
-            <div class="space-y-2">
-                <label
-                    for="city"
-                    class="block text-sm font-medium text-gray-300"
-                >
-                    City
-                </label>
-                <input
-                    id="city"
-                    type="text"
-                    v-model="city"
-                    required
-                    class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+            <!-- Subdistrict and District Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Subdistrict -->
+                <div class="space-y-2">
+                    <label
+                        for="subdistrict"
+                        class="block text-sm font-medium text-gray-300"
+                    >
+                        Subdistrict
+                    </label>
+                    <input
+                        id="subdistrict"
+                        type="text"
+                        v-model="subdistrict"
+                        required
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </div>
+
+                <!-- District -->
+                <div class="space-y-2">
+                    <label
+                        for="district"
+                        class="block text-sm font-medium text-gray-300"
+                    >
+                        District
+                    </label>
+                    <input
+                        id="district"
+                        type="text"
+                        v-model="district"
+                        required
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </div>
             </div>
 
-            <!-- State -->
-            <div class="space-y-2">
-                <label
-                    for="state"
-                    class="block text-sm font-medium text-gray-300"
-                >
-                    State/Province
-                </label>
-                <input
-                    id="state"
-                    type="text"
-                    v-model="state"
-                    required
-                    class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+            <!-- City and Province Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- City -->
+                <div class="space-y-2">
+                    <label
+                        for="city"
+                        class="block text-sm font-medium text-gray-300"
+                    >
+                        City
+                    </label>
+                    <input
+                        id="city"
+                        type="text"
+                        v-model="city"
+                        required
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </div>
+
+                <!-- Province -->
+                <div class="space-y-2">
+                    <label
+                        for="province"
+                        class="block text-sm font-medium text-gray-300"
+                    >
+                        Province
+                    </label>
+                    <input
+                        id="province"
+                        type="text"
+                        v-model="province"
+                        required
+                        class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </div>
             </div>
 
             <!-- Postal Code -->
             <div class="space-y-2">
                 <label
-                    for="postal"
+                    for="postal_code"
                     class="block text-sm font-medium text-gray-300"
                 >
                     Postal Code
                 </label>
                 <input
-                    id="postal"
+                    id="postal_code"
                     type="text"
-                    v-model="postal"
+                    v-model="postal_code"
                     required
                     class="w-full px-3 py-2 bg-[#0d1117] border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -99,7 +156,7 @@
             <button
                 type="submit"
                 :disabled="loading"
-                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <svg
                     v-if="loading"
@@ -130,24 +187,38 @@
 <script setup>
 import { ref } from 'vue'
 
-const street = ref('')
+// Form fields
+const name = ref('')
+const street_address = ref('')
+const subdistrict = ref('')
 const city = ref('')
-const state = ref('')
-const postal = ref('')
+const district = ref('')
+const province = ref('')
+const postal_code = ref('')
 const country = ref('')
 const loading = ref(false)
 
 const handleSubmit = async () => {
     try {
         loading.value = true
+        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500))
-        console.log('Address submitted:', {
-            street: street.value,
+
+        // Prepare data object matching database schema
+        const addressData = {
+            name: name.value,
+            street_address: street_address.value,
+            subdistrict: subdistrict.value,
             city: city.value,
-            state: state.value,
-            postal: postal.value,
+            district: district.value,
+            province: province.value,
+            postal_code: postal_code.value,
             country: country.value,
-        })
+            // Note: user_id would typically be provided by your auth system
+        }
+
+        console.log('Address submitted:', addressData)
+        // Here you would make your actual API call to save the data
     } catch (error) {
         console.error('Address update error:', error)
     } finally {
