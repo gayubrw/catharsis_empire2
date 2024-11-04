@@ -3,13 +3,17 @@ import HomeView from '../views/HomeView.vue'
 import WishlistView from '@/views/WishlistView.vue'
 import { SignInView, SignUpView, ForgotPasswordView } from '../views/auth'
 import ProfileView from '../views/ProfileView.vue'
-// import ShopComponent from '../components/ShopComponent.vue' // Pastikan path ini sesuai
 import LayoutsShopComponent from '@/components/layouts/LayoutsShopComponent.vue'
 import ProductDetail from '../components/ProductDetail.vue'
 import Collections from '@/views/CollectionView.vue'
 import AddressComponent from '../components/AddressComponent.vue'
 import ProfileComponent from '../components/ProfileComponent.vue'
+<<<<<<< HEAD
 import CartDetails from '@/components/CartDetails.vue'
+=======
+import CheckoutView from '@/views/CheckoutView.vue'
+import TransactionView from '@/views/TransactionView.vue'
+>>>>>>> 255343d371418dfa5028e8afc3e2ffdd2c012f53
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -91,6 +95,18 @@ const router = createRouter({
             path: '/product/:id',
             component: ProductDetail,
             props: true,
+        },
+        {
+            path: '/checkout',
+            name: 'checkout',
+            component: CheckoutView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/transaction',
+            name: 'Transaction',
+            component: TransactionView,
+            meta: { requiresAuth: true }
         },
     ],
 })

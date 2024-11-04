@@ -287,9 +287,218 @@ export const cartState = {
             id: 'catharsis-empire-1',
             name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
             price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
             quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
+            selectedSize: 'L',
+            image: '../catharsisempire1.jpg',
+        },
+        {
+            id: 'dystopian-1',
+            name: 'Project DYSTOPIAN - Spectrum',
+            price: 'Rp396.000',
+            quantity: 2,
+            selectedSize: 'M',
+            image: '../dystopian1.jpg',
+        },
+        {
+            id: 'catharsis-empire-1',
+            name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+            price: 'Rp969.000',
+            quantity: 1,
             selectedSize: 'L',
             image: '../catharsisempire1.jpg',
         },
     ],
+    addItem(product, selectedSize) {
+        const existingItem = this.items.find(
+            item => item.id === product.id && item.selectedSize === selectedSize
+        )
+
+        if (existingItem) {
+            existingItem.quantity++
+        } else {
+            this.items.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                selectedSize: selectedSize,
+                quantity: 1
+            })
+        }
+    },
+    removeItem(itemId) {
+        const index = this.items.findIndex(item => item.id === itemId)
+        if (index > -1) {
+            this.items.splice(index, 1)
+        }
+    },
+    updateQuantity(itemId, quantity) {
+        const item = this.items.find(item => item.id === itemId)
+        if (item && quantity > 0) {
+            item.quantity = quantity
+        }
+    },
+    clearCart() {
+        this.items = []
+    }
 }

@@ -279,6 +279,7 @@
                                 </router-link>
                             </div>
                             <button
+                                @click="proceedToCheckout"
                                 class="w-full py-3 rounded-lg transition-colors"
                                 :class="[
                                     cartState.items.length > 0
@@ -299,8 +300,10 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { cartState } from './MenuConfig'
 
+const router = useRouter()
 const props = defineProps({
     isSearchOpen: Boolean,
     isCartOpen: Boolean,
@@ -346,6 +349,13 @@ const removeFromCart = itemId => {
     const index = cartState.items.findIndex(item => item.id === itemId)
     if (index > -1) {
         cartState.items.splice(index, 1)
+    }
+}
+
+const proceedToCheckout = () => {
+    if (cartState.items.length > 0) {
+        updateCart(false) // Close cart panel
+        router.push('/checkout')
     }
 }
 
