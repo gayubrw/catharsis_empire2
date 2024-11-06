@@ -376,7 +376,8 @@ export const cartState = reactive({
     items: [],
     addItem(product, selectedSize) {
         const existingItem = this.items.find(
-            item => item.id === product.id && item.selectedSize === selectedSize
+            item =>
+                item.id === product.id && item.selectedSize === selectedSize,
         )
 
         if (existingItem) {
@@ -388,7 +389,7 @@ export const cartState = reactive({
                 price: product.price,
                 image: product.image,
                 selectedSize: selectedSize,
-                quantity: 1
+                quantity: 1,
             })
         }
     },
@@ -410,9 +411,9 @@ export const cartState = reactive({
     getTotal() {
         return this.items.reduce((total, item) => {
             const price = parseInt(item.price.replace(/[^\d]/g, ''))
-            return total + (price * item.quantity)
+            return total + price * item.quantity
         }, 0)
-    }
+    },
 })
 
 // Search State Management
@@ -422,7 +423,7 @@ export const searchState = reactive({
     filters: {
         category: '',
         priceRange: null,
-        size: ''
+        size: '',
     },
     setQuery(newQuery) {
         this.query = newQuery
@@ -438,7 +439,7 @@ export const searchState = reactive({
         this.filters = {
             category: '',
             priceRange: null,
-            size: ''
+            size: '',
         }
-    }
+    },
 })
