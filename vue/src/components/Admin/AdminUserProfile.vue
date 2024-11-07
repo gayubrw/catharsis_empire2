@@ -2,32 +2,34 @@
     <div class="relative">
         <button
             @click="toggleUserMenu"
-            class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-500"
+            class="flex items-center space-x-3 p-2 rounded-lg hover:bg-zinc-800/50 transition-all duration-200 group"
         >
             <div
-                class="w-10 h-10 rounded-full bg-gradient-to-r from-white to-purple-500 flex items-center justify-center text-white font-bold"
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white font-bold group-hover:from-purple-500 group-hover:to-purple-700 transition-all duration-200"
             >
                 {{ userInitials }}
             </div>
             <div class="text-left">
-                <p class="text-sm font-semibold text-white">
+                <p
+                    class="text-sm font-semibold text-white group-hover:text-purple-400 transition-colors duration-200"
+                >
                     {{ user.name }}
                 </p>
-                <p class="text-xs text-white">{{ user.email }}</p>
+                <p class="text-xs text-zinc-400">{{ user.email }}</p>
             </div>
         </button>
 
         <!-- Dropdown Menu -->
         <div
             v-if="showUserMenu"
-            class="absolute right-0 mt-2 w-48 bg-black rounded-lg shadow-xl py-1"
+            class="absolute right-0 mt-2 w-48 bg-zinc-900 rounded-lg shadow-xl border border-zinc-800 py-1 z-50"
         >
             <a
                 href="#"
-                class="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-500"
+                class="flex items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors duration-200"
             >
                 <svg
-                    class="w-4 h-4 mr-2"
+                    class="w-4 h-4 mr-2 text-zinc-400"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -41,10 +43,10 @@
             </a>
             <a
                 href="#"
-                class="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-500"
+                class="flex items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors duration-200"
             >
                 <svg
-                    class="w-4 h-4 mr-2"
+                    class="w-4 h-4 mr-2 text-zinc-400"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -56,10 +58,10 @@
                 </svg>
                 Settings
             </a>
-            <div class="border-t border-gray-100"></div>
+            <div class="border-t border-zinc-800 my-1"></div>
             <a
                 href="#"
-                class="flex items-center px-4 py-2 text-sm text-white hover:bg-red-500"
+                class="flex items-center px-4 py-2 text-sm text-red-400 hover:bg-zinc-800 transition-colors duration-200"
             >
                 <svg
                     class="w-4 h-4 mr-2"
@@ -82,8 +84,8 @@
 import { ref, computed } from 'vue'
 
 const user = ref({
-    name: 'John Doe',
-    email: 'john@example.com',
+    name: 'Admin User',
+    email: 'admin@dystopian.com',
 })
 
 const showUserMenu = ref(false)

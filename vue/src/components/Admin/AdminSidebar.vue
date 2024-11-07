@@ -1,38 +1,58 @@
 <template>
-    <aside class="fixed inset-y-0 left-0 w-64 bg-black">
-        <div class="flex items-center justify-center h-24 bg-black">
+    <aside
+        class="fixed inset-y-0 left-0 w-64 bg-black border-r border-zinc-800"
+    >
+        <!-- Logo -->
+        <div
+            class="flex items-center justify-center h-24 bg-zinc-900/50 border-b border-zinc-800"
+        >
             <h1
-                class="text-white text-2xl font-bold transition-opacity uppercase tracking-[0.1em]"
+                class="text-white text-2xl font-bold tracking-[0.2em] uppercase"
             >
-                ADMIN PANEL
+                CATHARSIS
             </h1>
         </div>
 
-        <div class="flex items-center justify-center">
+        <!-- Store Link -->
+        <div
+            class="flex items-center justify-center py-4 border-b border-zinc-800"
+        >
             <router-link
                 to="/"
-                class="text-white hover:opacity-80 transition-opacity uppercase text-sm tracking-wider"
+                class="text-zinc-400 hover:text-purple-400 transition-colors duration-200 uppercase text-sm tracking-wider flex items-center space-x-2"
             >
-                ← CONTINUE BROWSING
+                <svg
+                    class="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>View Store</span>
             </router-link>
         </div>
 
         <!-- Navigation Menu -->
-        <nav class="mt-6 px-3 tracking-[0.1em]">
+        <nav class="mt-6 px-3">
             <div class="space-y-1">
                 <router-link
                     v-for="item in menuItems"
                     :key="item.path"
                     :to="item.path"
-                    class="flex items-center px-4 py-3 text-white rounded-lg transition-all duration-200 hover:bg-gray-500 group"
+                    class="flex items-center px-4 py-3 text-zinc-400 rounded-lg transition-all duration-200 hover:bg-zinc-800/50 group"
                     :class="{
-                        'text-white': isCurrentRoute(item.path),
+                        'bg-purple-500/10 text-purple-400 border border-purple-500/20':
+                            isCurrentRoute(item.path),
                     }"
                 >
                     <div
-                        class="p-2 rounded-lg"
+                        class="p-2 rounded-lg transition-colors duration-200"
                         :class="
-                            isCurrentRoute(item.path) ? 'bg-black' : 'bg-black'
+                            isCurrentRoute(item.path)
+                                ? 'text-purple-400'
+                                : 'text-zinc-400 group-hover:text-purple-400'
                         "
                     >
                         <svg
@@ -52,11 +72,27 @@
                     <!-- Active Indicator -->
                     <span
                         v-if="isCurrentRoute(item.path)"
-                        class="ml-auto w-1.5 h-8 bg-white rounded-full"
+                        class="ml-auto w-1 h-8 bg-purple-500 rounded-full"
                     ></span>
                 </router-link>
             </div>
         </nav>
+
+        <!-- Bottom Section -->
+        <div
+            class="absolute bottom-0 left-0 right-0 p-6 border-t border-zinc-800"
+        >
+            <div
+                class="flex items-center justify-between text-sm text-zinc-400"
+            >
+                <span>Version 1.0.0</span>
+                <a
+                    href="#"
+                    class="hover:text-purple-400 transition-colors duration-200"
+                    >Docs</a
+                >
+            </div>
+        </div>
     </aside>
 </template>
 

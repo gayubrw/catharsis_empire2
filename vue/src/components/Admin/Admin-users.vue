@@ -1,14 +1,53 @@
 <template>
-    <!-- Search and Filter Section -->
-    <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-        <div
-            class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-        >
-            <!-- Search -->
-            <div class="relative flex-1">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
+    <div class="min-h-screen bg-black">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1
+                        class="text-3xl font-bold text-white tracking-wider uppercase"
+                    >
+                        Users
+                    </h1>
+                    <p class="text-zinc-400 mt-1 tracking-wide">
+                        Manage system users and their permissions
+                    </p>
+                </div>
+                <button
+                    @click="openAddUserModal"
+                    class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center"
+                >
                     <svg
-                        class="h-5 w-5 text-gray-400"
+                        class="w-4 h-4 mr-2"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+                        <path
+                            d="M12 4v16m8-8H4"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                    Add User
+                </button>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="bg-zinc-900 rounded-lg border border-zinc-800 p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Search -->
+                <div class="relative">
+                    <input
+                        type="text"
+                        v-model="searchQuery"
+                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                        placeholder="Search users..."
+                    />
+                    <svg
+                        class="w-5 h-5 absolute left-3 top-3 text-zinc-400"
                         viewBox="0 0 24 24"
                         fill="none"
                     >
@@ -20,20 +59,12 @@
                             stroke-linejoin="round"
                         />
                     </svg>
-                </span>
-                <input
-                    type="text"
-                    v-model="searchQuery"
-                    class="pl-10 pr-4 py-2 w-full border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search users..."
-                />
-            </div>
+                </div>
 
-            <!-- Filters -->
-            <div class="flex gap-4">
+                <!-- Role Filter -->
                 <select
                     v-model="roleFilter"
-                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                 >
                     <option value="">All Roles</option>
                     <option value="admin">Admin</option>
@@ -41,251 +72,220 @@
                     <option value="editor">Editor</option>
                 </select>
 
+                <!-- Status Filter -->
                 <select
                     v-model="statusFilter"
-                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                 >
                     <option value="">All Status</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
-                    <option value="suspended">Suspended</option>
                 </select>
-
-                <!-- Add User Button -->
-                <button
-                    @click="openAddUserModal"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                    Add User
-                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Users Table -->
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th
-                            v-for="header in tableHeaders"
-                            :key="header.key"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        <!-- Users Table -->
+        <div
+            class="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden"
+        >
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-zinc-800">
+                    <thead>
+                        <tr class="bg-zinc-900/50">
+                            <th
+                                v-for="header in tableHeaders"
+                                :key="header.key"
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                {{ header.label }}
+                            </th>
+                            <th
+                                class="px-6 py-4 text-right text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-800">
+                        <tr
+                            v-for="user in filteredUsers"
+                            :key="user.id"
+                            class="hover:bg-zinc-800/50 transition-colors duration-200"
                         >
-                            {{ header.label }}
-                        </th>
-                        <th class="px-6 py-3 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="user in filteredUsers" :key="user.id">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="h-10 w-10 flex-shrink-0">
-                                    <img
-                                        :src="user.avatar"
-                                        class="h-10 w-10 rounded-full"
-                                        :alt="user.name"
-                                    />
-                                </div>
-                                <div class="ml-4">
+                            <!-- User Info -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
                                     <div
-                                        class="text-sm font-medium text-gray-900"
+                                        class="h-10 w-10 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white"
                                     >
-                                        {{ user.name }}
+                                        {{ getUserInitials(user.name) }}
                                     </div>
-                                    <div class="text-sm text-gray-500">
-                                        {{ user.email }}
+                                    <div class="ml-4">
+                                        <div
+                                            class="text-sm font-medium text-white"
+                                        >
+                                            {{ user.name }}
+                                        </div>
+                                        <div class="text-sm text-zinc-400">
+                                            {{ user.email }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span
-                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                :class="getRoleClass(user.role)"
-                            >
-                                {{ user.role }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span
-                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                :class="getStatusClass(user.status)"
-                            >
-                                {{ user.status }}
-                            </span>
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                        >
-                            {{ user.lastLogin }}
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                        >
-                            <button
-                                @click="editUser(user)"
-                                class="text-blue-600 hover:text-blue-900 mr-4"
-                            >
-                                Edit
-                            </button>
-                            <button
-                                @click="deleteUser(user.id)"
-                                class="text-red-600 hover:text-red-900"
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                            </td>
 
-        <!-- Pagination -->
-        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div class="flex items-center justify-between">
-                <div class="flex-1 flex justify-between sm:hidden">
-                    <button
-                        @click="previousPage"
-                        :disabled="currentPage === 1"
-                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                        Previous
-                    </button>
-                    <button
-                        @click="nextPage"
-                        :disabled="currentPage === totalPages"
-                        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                        Next
-                    </button>
-                </div>
-                <div
-                    class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
-                >
-                    <div>
-                        <p class="text-sm text-gray-700">
-                            Showing
-                            <span class="font-medium">{{
-                                startIndex + 1
-                            }}</span>
-                            to
-                            <span class="font-medium">{{ endIndex }}</span>
-                            of
-                            <span class="font-medium">{{ totalUsers }}</span>
-                            results
-                        </p>
-                    </div>
-                    <div>
-                        <nav
-                            class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                        >
-                            <button
-                                @click="previousPage"
-                                :disabled="currentPage === 1"
-                                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                            <!-- Role -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span :class="getRoleClass(user.role)">
+                                    {{ user.role }}
+                                </span>
+                            </td>
+
+                            <!-- Status -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span :class="getStatusClass(user.status)">
+                                    {{ user.status }}
+                                </span>
+                            </td>
+
+                            <!-- Last Login -->
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm text-zinc-400"
                             >
-                                Previous
-                            </button>
+                                {{ formatLastLogin(user.lastLogin) }}
+                            </td>
+
+                            <!-- Actions -->
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-right space-x-3"
+                            >
+                                <button
+                                    @click="editUser(user)"
+                                    class="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm font-medium"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    @click="deleteUser(user.id)"
+                                    class="text-red-400 hover:text-red-300 transition-colors duration-200 text-sm font-medium"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="bg-zinc-900 px-6 py-4 border-t border-zinc-800">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-zinc-400">
+                        Showing
+                        <span class="font-medium text-white">{{
+                            startIndex + 1
+                        }}</span>
+                        to
+                        <span class="font-medium text-white">{{
+                            endIndex
+                        }}</span>
+                        of
+                        <span class="font-medium text-white">{{
+                            totalUsers
+                        }}</span>
+                        users
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button
+                            @click="previousPage"
+                            :disabled="currentPage === 1"
+                            class="px-3 py-1 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                        >
+                            Previous
+                        </button>
+                        <div class="flex space-x-1">
                             <button
                                 v-for="page in displayedPages"
                                 :key="page"
                                 @click="goToPage(page)"
-                                :class="[
+                                class="px-3 py-1 text-sm rounded-md transition-all duration-200"
+                                :class="
                                     currentPage === page
-                                        ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-                                    'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
-                                ]"
+                                        ? 'bg-purple-600 text-white'
+                                        : 'text-zinc-400 hover:text-white'
+                                "
                             >
                                 {{ page }}
                             </button>
-                            <button
-                                @click="nextPage"
-                                :disabled="currentPage === totalPages"
-                                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                            >
-                                Next
-                            </button>
-                        </nav>
+                        </div>
+                        <button
+                            @click="nextPage"
+                            :disabled="currentPage === totalPages"
+                            class="px-3 py-1 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                        >
+                            Next
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Add/Edit User Modal -->
-    <div
-        v-if="showModal"
-        class="fixed z-10 inset-0 overflow-y-auto"
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
-    >
+        <!-- User Modal -->
         <div
-            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+            v-if="showModal"
+            class="fixed inset-0 z-50 overflow-y-auto"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
         >
             <div
-                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                aria-hidden="true"
-            ></div>
-            <span
-                class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                aria-hidden="true"
-                >&#8203;</span
+                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
             >
-            <div
-                class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
-            >
-                <div>
-                    <h3
-                        class="text-lg leading-6 font-medium text-gray-900"
-                        id="modal-title"
-                    >
-                        {{ editingUser ? 'Edit User' : 'Add New User' }}
-                    </h3>
-                    <div class="mt-2">
+                <!-- Background overlay -->
+                <div
+                    class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
+                    aria-hidden="true"
+                ></div>
+
+                <div
+                    class="inline-block align-bottom bg-zinc-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                >
+                    <div class="bg-zinc-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <h3 class="text-lg font-medium text-white mb-4">
+                            {{ editingUser ? 'Edit User' : 'Add New User' }}
+                        </h3>
                         <form @submit.prevent="saveUser" class="space-y-4">
                             <div>
                                 <label
-                                    for="name"
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                     >Name</label
                                 >
                                 <input
                                     type="text"
-                                    id="name"
                                     v-model="userForm.name"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                     required
                                 />
                             </div>
                             <div>
                                 <label
-                                    for="email"
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                     >Email</label
                                 >
                                 <input
                                     type="email"
-                                    id="email"
                                     v-model="userForm.email"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                     required
                                 />
                             </div>
                             <div>
                                 <label
-                                    for="role"
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                     >Role</label
                                 >
                                 <select
-                                    id="role"
                                     v-model="userForm.role"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                 >
                                     <option value="admin">Admin</option>
                                     <option value="user">User</option>
@@ -294,40 +294,35 @@
                             </div>
                             <div>
                                 <label
-                                    for="status"
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                     >Status</label
                                 >
                                 <select
-                                    id="status"
                                     v-model="userForm.status"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                 >
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
-                                    <option value="suspended">Suspended</option>
                                 </select>
                             </div>
                         </form>
                     </div>
-                </div>
-                <div
-                    class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
-                >
-                    <button
-                        type="button"
-                        @click="saveUser"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                    <div
+                        class="bg-zinc-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
                     >
-                        {{ editingUser ? 'Save Changes' : 'Add User' }}
-                    </button>
-                    <button
-                        type="button"
-                        @click="closeModal"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                    >
-                        Cancel
-                    </button>
+                        <button
+                            @click="saveUser"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
+                        >
+                            {{ editingUser ? 'Save Changes' : 'Add User' }}
+                        </button>
+                        <button
+                            @click="closeModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-zinc-600 shadow-sm px-4 py-2 bg-black text-base font-medium text-zinc-300 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -344,7 +339,7 @@ const roleFilter = ref('')
 const statusFilter = ref('')
 
 // Pagination
-const itemsPerPage = 10
+const itemsPerPage = 8
 const currentPage = ref(1)
 
 // Modal and Form
@@ -397,24 +392,60 @@ const displayedPages = computed(() => {
 })
 
 // Methods
+const getUserInitials = name => {
+    return name
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+}
+
 const getRoleClass = role => {
-    const classes = {
-        admin: 'bg-purple-100 text-purple-800',
-        user: 'bg-green-100 text-green-800',
-        editor: 'bg-blue-100 text-blue-800',
+    const baseClasses = 'px-3 py-1 text-xs font-medium rounded-full border'
+    const roleClasses = {
+        admin: 'bg-purple-900/30 text-purple-400 border-purple-700/50',
+        user: 'bg-blue-900/30 text-blue-400 border-blue-700/50',
+        editor: 'bg-green-900/30 text-green-400 border-green-700/50',
     }
-    return classes[role] || 'bg-gray-100 text-gray-800'
+    return `${baseClasses} ${roleClasses[role]}`
 }
 
 const getStatusClass = status => {
-    const classes = {
-        active: 'bg-green-100 text-green-800',
-        inactive: 'bg-gray-100 text-gray-800',
-        suspended: 'bg-red-100 text-red-800',
+    const baseClasses = 'px-3 py-1 text-xs font-medium rounded-full border'
+    const statusClasses = {
+        active: 'bg-emerald-900/30 text-emerald-400 border-emerald-700/50',
+        inactive: 'bg-zinc-900/30 text-zinc-400 border-zinc-700/50',
+        suspended: 'bg-red-900/30 text-red-400 border-red-700/50',
     }
-    return classes[status] || 'bg-gray-100 text-gray-800'
+    return `${baseClasses} ${statusClasses[status]}`
 }
 
+const formatLastLogin = date => {
+    if (date === 'Never') return 'Never logged in'
+    const loginDate = new Date(date)
+    const now = new Date()
+    const diffTime = Math.abs(now - loginDate)
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 1) return 'Yesterday'
+    if (diffDays < 1) {
+        const diffHours = Math.ceil(diffTime / (1000 * 60 * 60))
+        if (diffHours < 1) {
+            const diffMinutes = Math.ceil(diffTime / (1000 * 60))
+            return `${diffMinutes} minutes ago`
+        }
+        return `${diffHours} hours ago`
+    }
+    if (diffDays < 7) return `${diffDays} days ago`
+
+    return loginDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    })
+}
+
+// Modal Methods
 const openAddUserModal = () => {
     editingUser.value = null
     userForm.value = {
@@ -459,7 +490,7 @@ const saveUser = () => {
             id: usersData.length + 1,
             ...userForm.value,
             lastLogin: 'Never',
-            avatar: '/api/placeholder/40/40',
+            avatar: `/api/placeholder/40/40`,
         }
         usersData.push(newUser)
     }
@@ -467,7 +498,11 @@ const saveUser = () => {
 }
 
 const deleteUser = userId => {
-    if (confirm('Are you sure you want to delete this user?')) {
+    if (
+        confirm(
+            'Are you sure you want to delete this user? This action cannot be undone.',
+        )
+    ) {
         const index = usersData.findIndex(u => u.id === userId)
         if (index !== -1) {
             usersData.splice(index, 1)
@@ -494,5 +529,49 @@ const goToPage = page => {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+/* Input autofill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #000000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Modal transition */
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+/* Status and role badge glow effect on hover */
+[class*='bg-'].rounded-full:hover {
+    filter: brightness(1.1);
+    transition: filter 0.2s ease-in-out;
+}
 </style>

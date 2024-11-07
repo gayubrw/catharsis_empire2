@@ -1,308 +1,297 @@
 <template>
-    <!-- Search and Filter Section -->
-    <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-        <div
-            class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-        >
-            <!-- Search -->
-            <div class="relative flex-1">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                    <svg
-                        class="h-5 w-5 text-gray-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
+    <div class="min-h-screen bg-black">
+        <!-- Search and Filter Section -->
+        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+            <div
+                class="flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+            >
+                <!-- Search -->
+                <div class="relative flex-1">
+                    <span
+                        class="absolute inset-y-0 left-0 pl-3 flex items-center"
                     >
-                        <path
-                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                        <svg
+                            class="h-5 w-5 text-zinc-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <path
+                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </span>
+                    <input
+                        type="text"
+                        v-model="searchQuery"
+                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                        placeholder="Search products..."
+                    />
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-4">
+                    <select
+                        v-model="categoryFilter"
+                        class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                    >
+                        <option value="">All Categories</option>
+                        <option
+                            v-for="category in productCategories"
+                            :key="category"
+                            :value="category"
+                        >
+                            {{ category }}
+                        </option>
+                    </select>
+
+                    <select
+                        v-model="statusFilter"
+                        class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                    >
+                        <option value="">All Status</option>
+                        <option value="in_stock">In Stock</option>
+                        <option value="low_stock">Low Stock</option>
+                        <option value="out_of_stock">Out of Stock</option>
+                    </select>
+
+                    <!-- Add Product Button -->
+                    <button
+                        @click="openAddProductModal"
+                        class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 flex items-center space-x-2"
+                    >
+                        <svg
+                            class="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
                             stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                </span>
-                <input
-                    type="text"
-                    v-model="searchQuery"
-                    class="pl-10 pr-4 py-2 w-full border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search products..."
-                />
-            </div>
-
-            <!-- Filters -->
-            <div class="flex flex-wrap gap-4">
-                <select
-                    v-model="categoryFilter"
-                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                    <option value="">All Categories</option>
-                    <option
-                        v-for="category in productCategories"
-                        :key="category"
-                        :value="category"
-                    >
-                        {{ category }}
-                    </option>
-                </select>
-
-                <select
-                    v-model="statusFilter"
-                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                    <option value="">All Status</option>
-                    <option value="in_stock">In Stock</option>
-                    <option value="low_stock">Low Stock</option>
-                    <option value="out_of_stock">Out of Stock</option>
-                </select>
-
-                <!-- Add Product Button -->
-                <button
-                    @click="openAddProductModal"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center"
-                >
-                    <svg
-                        class="w-5 h-5 mr-2"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <path
-                            d="M12 4v16m8-8H4"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                    Add Product
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Products Table -->
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th
-                            v-for="header in productTableHeaders"
-                            :key="header.key"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            {{ header.label }}
-                        </th>
-                        <th class="px-6 py-3 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="product in filteredProducts" :key="product.id">
-                        <!-- Product Info -->
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="h-20 w-20 flex-shrink-0">
-                                    <img
-                                        :src="product.image"
-                                        class="h-20 w-20 rounded-lg object-cover"
-                                        :alt="product.name"
-                                    />
-                                </div>
-                                <div class="ml-4">
-                                    <div
-                                        class="text-sm font-medium text-gray-900"
-                                    >
-                                        {{ product.name }}
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-
-                        <!-- Price -->
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
-                                Rp{{ product.price.toFixed(2) }}
-                            </div>
-                        </td>
-
-                        <!-- Category -->
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">
-                                {{ product.category }}
-                            </div>
-                        </td>
-
-                        <!-- Status -->
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span
-                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                :class="getStatusClass(product.status)"
-                            >
-                                {{ formatStatus(product.status) }}
-                            </span>
-                        </td>
-
-                        <!-- Stock -->
-                        <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                        >
-                            {{ product.stock }}
-                        </td>
-
-                        <!-- SKU -->
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-500">
-                                {{ product.sku }}
-                            </div>
-                        </td>
-
-                        <!-- Last Updated -->
-                        <td
-                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                        >
-                            {{ formatDate(product.lastUpdated) }}
-                        </td>
-
-                        <!-- Actions -->
-                        <td
-                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                        >
-                            <button
-                                @click="editProduct(product)"
-                                class="text-blue-600 hover:text-blue-900 mr-4"
-                            >
-                                Edit
-                            </button>
-                            <button
-                                @click="deleteProduct(product.id)"
-                                class="text-red-600 hover:text-red-900"
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div class="flex items-center justify-between">
-                <div class="flex-1 flex justify-between sm:hidden">
-                    <button
-                        @click="previousPage"
-                        :disabled="currentPage === 1"
-                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                        Previous
-                    </button>
-                    <button
-                        @click="nextPage"
-                        :disabled="currentPage === totalPages"
-                        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                        Next
+                            <path
+                                d="M12 4v16m8-8H4"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>Add Product</span>
                     </button>
                 </div>
-                <div
-                    class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
-                >
-                    <div>
-                        <p class="text-sm text-gray-700">
-                            Showing
-                            <span class="font-medium">{{
-                                startIndex + 1
-                            }}</span>
-                            to
-                            <span class="font-medium">{{ endIndex }}</span>
-                            of
-                            <span class="font-medium">{{ totalProducts }}</span>
-                            results
-                        </p>
-                    </div>
-                    <div>
-                        <nav
-                            class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                        >
-                            <button
-                                @click="previousPage"
-                                :disabled="currentPage === 1"
-                                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            </div>
+        </div>
+
+        <!-- Products Table -->
+        <div
+            class="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden"
+        >
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-zinc-800">
+                    <thead class="bg-zinc-900/50">
+                        <tr>
+                            <th
+                                v-for="header in productTableHeaders"
+                                :key="header.key"
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
                             >
-                                Previous
-                            </button>
+                                {{ header.label }}
+                            </th>
+                            <th
+                                class="px-6 py-4 text-right text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-800">
+                        <tr
+                            v-for="product in filteredProducts"
+                            :key="product.id"
+                            class="hover:bg-zinc-800/50 transition-colors duration-200"
+                        >
+                            <!-- Product Info -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div
+                                        class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-zinc-700"
+                                    >
+                                        <img
+                                            :src="product.image"
+                                            class="h-16 w-16 object-cover"
+                                            :alt="product.name"
+                                        />
+                                    </div>
+                                    <div class="ml-4">
+                                        <div
+                                            class="text-sm font-medium text-white"
+                                        >
+                                            {{ product.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Price -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-mono text-white">
+                                    Rp{{ formatPrice(product.price) }}
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-3 py-1 text-xs font-medium rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700"
+                                >
+                                    {{ product.category }}
+                                </span>
+                            </td>
+
+                            <!-- Status -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span :class="getStatusClass(product.status)">
+                                    {{ formatStatus(product.status) }}
+                                </span>
+                            </td>
+
+                            <!-- Stock -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-zinc-300 font-mono">
+                                    {{ product.stock }}
+                                </div>
+                            </td>
+
+                            <!-- Collection -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-zinc-300">
+                                    {{ getCollectionName(product.collection) }}
+                                </div>
+                            </td>
+
+                            <!-- Last Updated -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-zinc-400">
+                                    {{ formatDate(product.lastUpdated) }}
+                                </div>
+                            </td>
+
+                            <!-- Actions -->
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-right space-x-3"
+                            >
+                                <button
+                                    @click="editProduct(product)"
+                                    class="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm font-medium"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    @click="deleteProduct(product.id)"
+                                    class="text-red-400 hover:text-red-300 transition-colors duration-200 text-sm font-medium"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="bg-zinc-900 px-6 py-4 border-t border-zinc-800">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-zinc-400">
+                        Showing
+                        <span class="font-medium text-white">{{
+                            startIndex + 1
+                        }}</span>
+                        to
+                        <span class="font-medium text-white">{{
+                            endIndex
+                        }}</span>
+                        of
+                        <span class="font-medium text-white">{{
+                            totalProducts
+                        }}</span>
+                        products
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button
+                            @click="previousPage"
+                            :disabled="currentPage === 1"
+                            class="px-3 py-1 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                        >
+                            Previous
+                        </button>
+                        <div class="flex space-x-1">
                             <button
                                 v-for="page in displayedPages"
                                 :key="page"
                                 @click="goToPage(page)"
-                                :class="[
+                                class="px-3 py-1 text-sm rounded-md transition-all duration-200"
+                                :class="
                                     currentPage === page
-                                        ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-                                    'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
-                                ]"
+                                        ? 'bg-purple-600 text-white'
+                                        : 'text-zinc-400 hover:text-white'
+                                "
                             >
                                 {{ page }}
                             </button>
-                            <button
-                                @click="nextPage"
-                                :disabled="currentPage === totalPages"
-                                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                            >
-                                Next
-                            </button>
-                        </nav>
+                        </div>
+                        <button
+                            @click="nextPage"
+                            :disabled="currentPage === totalPages"
+                            class="px-3 py-1 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                        >
+                            Next
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Add/Edit Product Modal -->
-    <div
-        v-if="showModal"
-        class="fixed z-10 inset-0 overflow-y-auto"
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
-    >
+        <!-- Product Modal -->
         <div
-            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+            v-if="showModal"
+            class="fixed inset-0 z-50 overflow-y-auto"
+            aria-labelledby="modal-title"
+            role="dialog"
+            aria-modal="true"
         >
             <div
-                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                aria-hidden="true"
-            ></div>
-            <span
-                class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                aria-hidden="true"
-                >&#8203;</span
+                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
             >
-            <div
-                class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
-            >
-                <div>
-                    <h3
-                        class="text-lg leading-6 font-medium text-gray-900"
-                        id="modal-title"
-                    >
-                        {{
-                            editingProduct ? 'Edit Product' : 'Add New Product'
-                        }}
-                    </h3>
-                    <div class="mt-2">
+                <!-- Background overlay -->
+                <div
+                    class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
+                    aria-hidden="true"
+                ></div>
+
+                <div
+                    class="inline-block align-bottom bg-zinc-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                >
+                    <div class="bg-zinc-900 px-4 pt-5 pb-4 sm:p-6">
+                        <h3 class="text-lg font-medium text-white mb-4">
+                            {{
+                                editingProduct
+                                    ? 'Edit Product'
+                                    : 'Add New Product'
+                            }}
+                        </h3>
+
                         <form @submit.prevent="saveProduct" class="space-y-4">
                             <!-- Name -->
                             <div>
                                 <label
-                                    for="name"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Product Name</label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                 >
+                                    Product Name
+                                </label>
                                 <input
                                     type="text"
-                                    id="name"
                                     v-model="productForm.name"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                     required
                                 />
                             </div>
@@ -310,25 +299,21 @@
                             <!-- Price -->
                             <div>
                                 <label
-                                    for="price"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Price</label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                 >
-                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    Price
+                                </label>
+                                <div class="relative">
                                     <div
                                         class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                                     >
-                                        <span class="text-gray-500 sm:text-sm"
-                                            >$</span
-                                        >
+                                        <span class="text-zinc-400">Rp</span>
                                     </div>
                                     <input
                                         type="number"
-                                        id="price"
                                         v-model="productForm.price"
-                                        class="pl-7 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                         required
-                                        step="0.01"
                                         min="0"
                                     />
                                 </div>
@@ -337,14 +322,13 @@
                             <!-- Category -->
                             <div>
                                 <label
-                                    for="category"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Category</label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                 >
+                                    Category
+                                </label>
                                 <select
-                                    id="category"
                                     v-model="productForm.category"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                 >
                                     <option
                                         v-for="category in productCategories"
@@ -359,47 +343,51 @@
                             <!-- Stock -->
                             <div>
                                 <label
-                                    for="stock"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Stock</label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                 >
+                                    Stock
+                                </label>
                                 <input
                                     type="number"
-                                    id="stock"
                                     v-model="productForm.stock"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                     required
                                     min="0"
                                 />
                             </div>
 
-                            <!-- SKU -->
+                            <!-- Collection -->
                             <div>
                                 <label
-                                    for="sku"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >SKU</label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                 >
-                                <input
-                                    type="text"
-                                    id="sku"
-                                    v-model="productForm.sku"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                                    required
-                                />
+                                    Collection
+                                </label>
+                                <select
+                                    v-model="productForm.collection"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                >
+                                    <option value="">Select Collection</option>
+                                    <option
+                                        v-for="collection in collectionsData"
+                                        :key="collection.id"
+                                        :value="collection.id"
+                                    >
+                                        {{ collection.name }}
+                                    </option>
+                                </select>
                             </div>
 
                             <!-- Status -->
                             <div>
                                 <label
-                                    for="status"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Status</label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
                                 >
+                                    Status
+                                </label>
                                 <select
-                                    id="status"
                                     v-model="productForm.status"
-                                    class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                 >
                                     <option value="in_stock">In Stock</option>
                                     <option value="low_stock">Low Stock</option>
@@ -410,24 +398,24 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div
-                    class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
-                >
-                    <button
-                        type="button"
-                        @click="saveProduct"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                    <div
+                        class="bg-zinc-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
                     >
-                        {{ editingProduct ? 'Save Changes' : 'Add Product' }}
-                    </button>
-                    <button
-                        type="button"
-                        @click="closeModal"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                    >
-                        Cancel
-                    </button>
+                        <button
+                            @click="saveProduct"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
+                        >
+                            {{
+                                editingProduct ? 'Save Changes' : 'Add Product'
+                            }}
+                        </button>
+                        <button
+                            @click="closeModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-zinc-600 shadow-sm px-4 py-2 bg-black text-base font-medium text-zinc-300 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -440,6 +428,7 @@ import {
     productsData,
     productTableHeaders,
     productCategories,
+    collectionsData,
 } from './MenuConfig'
 
 // Search and Filter
@@ -448,7 +437,7 @@ const categoryFilter = ref('')
 const statusFilter = ref('')
 
 // Pagination
-const itemsPerPage = 10
+const itemsPerPage = 8
 const currentPage = ref(1)
 
 // Modal and Form
@@ -460,17 +449,15 @@ const productForm = ref({
     category: productCategories[0],
     status: 'in_stock',
     stock: 0,
-    sku: '',
+    collection: '',
 })
 
 // Computed Properties
 const filteredProducts = computed(() => {
     return productsData.filter(product => {
-        const matchesSearch =
-            product.name
-                .toLowerCase()
-                .includes(searchQuery.value.toLowerCase()) ||
-            product.sku.toLowerCase().includes(searchQuery.value.toLowerCase())
+        const matchesSearch = product.name
+            .toLowerCase()
+            .includes(searchQuery.value.toLowerCase())
         const matchesCategory =
             !categoryFilter.value || product.category === categoryFilter.value
         const matchesStatus =
@@ -506,20 +493,21 @@ const displayedPages = computed(() => {
 })
 
 // Methods
-const getStatusClass = status => {
-    const classes = {
-        in_stock: 'bg-green-100 text-green-800',
-        low_stock: 'bg-yellow-100 text-yellow-800',
-        out_of_stock: 'bg-red-100 text-red-800',
-    }
-    return classes[status] || 'bg-gray-100 text-gray-800'
-}
-
 const formatStatus = status => {
     return status
         .split('_')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ')
+}
+
+const getStatusClass = status => {
+    const baseClasses = 'px-3 py-1 text-xs font-medium rounded-full border'
+    const statusClasses = {
+        in_stock: 'bg-emerald-900/30 text-emerald-400 border-emerald-700/50',
+        low_stock: 'bg-yellow-900/30 text-yellow-400 border-yellow-700/50',
+        out_of_stock: 'bg-red-900/30 text-red-400 border-red-700/50',
+    }
+    return `${baseClasses} ${statusClasses[status]}`
 }
 
 const formatDate = date => {
@@ -530,6 +518,18 @@ const formatDate = date => {
     })
 }
 
+const formatPrice = price => {
+    return new Intl.NumberFormat('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(price)
+}
+
+const getCollectionName = collectionId => {
+    const collection = collectionsData.find(c => c.id === collectionId)
+    return collection ? collection.name : '-'
+}
+
 const openAddProductModal = () => {
     editingProduct.value = null
     productForm.value = {
@@ -538,7 +538,7 @@ const openAddProductModal = () => {
         category: productCategories[0],
         status: 'in_stock',
         stock: 0,
-        sku: '',
+        collection: '',
     }
     showModal.value = true
 }
@@ -558,7 +558,7 @@ const closeModal = () => {
         category: productCategories[0],
         status: 'in_stock',
         stock: 0,
-        sku: '',
+        collection: '',
     }
 }
 
@@ -589,7 +589,11 @@ const saveProduct = () => {
 }
 
 const deleteProduct = productId => {
-    if (confirm('Are you sure you want to delete this product?')) {
+    if (
+        confirm(
+            'Are you sure you want to delete this product? This action cannot be undone.',
+        )
+    ) {
         const index = productsData.findIndex(p => p.id === productId)
         if (index !== -1) {
             productsData.splice(index, 1)
@@ -616,5 +620,59 @@ const goToPage = page => {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+/* Input autofill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #000000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Modal transition */
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+/* Font settings */
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Status badge hover effect */
+[class*='rounded-full']:hover {
+    filter: brightness(1.1);
+    transition: filter 0.2s ease-in-out;
+}
+
+/* Button focus ring offset fix for dark theme */
+button:focus {
+    --tw-ring-offset-color: #000000;
+}
 </style>

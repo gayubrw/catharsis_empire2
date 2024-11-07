@@ -1,19 +1,23 @@
 <template>
-    <div>
+    <div class="min-h-screen bg-black">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
+        <div class="mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold text-white">Categories</h1>
-                <p class="text-sm text-gray-300 mt-1">
-                    Manage product categories and subcategories
+                <h1
+                    class="text-3xl font-bold text-white tracking-wider uppercase"
+                >
+                    Categories
+                </h1>
+                <p class="text-zinc-400 mt-1 tracking-wide">
+                    Organize your products with dynamic categories
                 </p>
             </div>
             <button
                 @click="openAddCategoryModal"
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center"
+                class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center space-x-2 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
             >
                 <svg
-                    class="w-5 h-5 mr-2"
+                    class="w-5 h-5"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -25,39 +29,40 @@
                         stroke-linejoin="round"
                     />
                 </svg>
-                Add Category
+                <span>Add Category</span>
             </button>
         </div>
 
-        <!-- Search and Filter -->
-        <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
-            <div class="flex flex-wrap gap-4">
-                <div class="relative flex-1">
+        <!-- Search and Filter Section -->
+        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Search -->
+                <div class="relative">
                     <input
                         type="text"
                         v-model="searchQuery"
-                        class="pl-10 pr-4 py-2 w-full border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                         placeholder="Search categories..."
                     />
-                    <span class="absolute left-3 top-2.5 text-gray-400">
-                        <svg
-                            class="w-5 h-5"
-                            fill="none"
+                    <svg
+                        class="w-5 h-5 absolute left-3 top-3 text-zinc-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <path
+                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
                             stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                        </svg>
-                    </span>
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
                 </div>
+
+                <!-- Status Filter -->
                 <select
                     v-model="statusFilter"
-                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                 >
                     <option value="">All Status</option>
                     <option value="active">Active</option>
@@ -71,84 +76,127 @@
             <div
                 v-for="category in filteredCategories"
                 :key="category.id"
-                class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+                class="group bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300"
             >
-                <div class="p-6">
-                    <!-- Category Header -->
+                <!-- Category Header -->
+                <div class="p-6 border-b border-zinc-800">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center">
-                            <img
-                                :src="category.image"
-                                :alt="category.name"
-                                class="w-12 h-12 rounded-lg object-cover"
-                            />
-                            <div class="ml-3">
-                                <h3 class="text-lg font-semibold text-gray-900">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-12 w-12 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center"
+                            >
+                                <svg
+                                    class="w-6 h-6 text-white"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-white group-hover:text-purple-400 transition-colors duration-300"
+                                >
                                     {{ category.name }}
                                 </h3>
-                                <span class="text-sm text-gray-500">{{
-                                    category.slug
-                                }}</span>
+                                <p class="text-sm text-zinc-400">
+                                    {{ category.slug }}
+                                </p>
                             </div>
                         </div>
-                        <span
-                            class="px-2 py-1 text-xs font-semibold rounded-full"
-                            :class="
-                                category.status === 'active'
-                                    ? 'bg-green-100 text-green-800'
-                                    : 'bg-gray-100 text-gray-800'
-                            "
-                        >
+                        <span :class="getStatusClass(category.status)">
                             {{ category.status }}
                         </span>
                     </div>
-
-                    <!-- Category Info -->
-                    <p class="text-sm text-gray-600 mb-4">
+                    <p class="text-sm text-zinc-300">
                         {{ category.description }}
                     </p>
+                </div>
 
-                    <!-- Stats -->
-                    <div
-                        class="flex items-center justify-between text-sm text-gray-500 mb-4"
-                    >
-                        <span>{{ category.productsCount }} Products</span>
-                        <span
-                            >{{
-                                category.subcategories.length
-                            }}
-                            Subcategories</span
-                        >
-                    </div>
-
-                    <!-- Subcategories -->
-                    <div class="mb-4">
-                        <div class="flex flex-wrap gap-2">
-                            <span
-                                v-for="subcategory in category.subcategories"
-                                :key="subcategory"
-                                class="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                <!-- Category Stats -->
+                <div class="px-6 py-4 bg-zinc-900/50">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
+                            <span class="text-sm text-zinc-400">Products</span>
+                            <p class="mt-1 text-lg font-mono text-white">
+                                {{ category.productsCount }}
+                            </p>
+                        </div>
+                        <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
+                            <span class="text-sm text-zinc-400"
+                                >Subcategories</span
                             >
-                                {{ subcategory }}
-                            </span>
+                            <p class="mt-1 text-lg font-mono text-white">
+                                {{ category.subcategories.length }}
+                            </p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Actions -->
-                    <div class="flex justify-end space-x-3 mt-4 pt-4 border-t">
-                        <button
-                            @click="editCategory(category)"
-                            class="text-sm text-blue-600 hover:text-blue-700"
+                <!-- Subcategories -->
+                <div class="px-6 py-4 border-t border-zinc-800">
+                    <h4 class="text-sm font-medium text-zinc-400 mb-3">
+                        Subcategories
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span
+                            v-for="subcategory in category.subcategories"
+                            :key="subcategory"
+                            class="px-2 py-1 text-xs font-medium bg-zinc-800 text-zinc-300 rounded-lg border border-zinc-700/50 hover:border-purple-500/50 transition-colors duration-200"
                         >
-                            Edit
-                        </button>
-                        <button
-                            @click="deleteCategory(category.id)"
-                            class="text-sm text-red-600 hover:text-red-700"
-                        >
-                            Delete
-                        </button>
+                            {{ subcategory }}
+                        </span>
                     </div>
+                </div>
+
+                <!-- Actions -->
+                <div
+                    class="px-6 py-4 border-t border-zinc-800 flex justify-end space-x-3"
+                >
+                    <button
+                        @click="editCategory(category)"
+                        class="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm flex items-center space-x-1"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <path
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>Edit</span>
+                    </button>
+                    <button
+                        @click="deleteCategory(category.id)"
+                        class="text-red-400 hover:text-red-300 transition-colors duration-200 text-sm flex items-center space-x-1"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <path
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>Delete</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -156,7 +204,7 @@
         <!-- Category Modal -->
         <div
             v-if="showModal"
-            class="fixed z-10 inset-0 overflow-y-auto"
+            class="fixed inset-0 z-50 overflow-y-auto"
             aria-labelledby="modal-title"
             role="dialog"
             aria-modal="true"
@@ -166,98 +214,91 @@
             >
                 <!-- Background overlay -->
                 <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
                     aria-hidden="true"
                 ></div>
 
-                <!-- Modal panel -->
                 <div
-                    class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+                    class="inline-block align-bottom bg-zinc-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
                 >
-                    <h3 class="text-lg font-medium text-gray-900">
-                        {{
-                            editingCategory
-                                ? 'Edit Category'
-                                : 'Add New Category'
-                        }}
-                    </h3>
+                    <div class="bg-zinc-900 px-4 pt-5 pb-4 sm:p-6">
+                        <h3 class="text-lg font-medium text-white mb-4">
+                            {{
+                                editingCategory
+                                    ? 'Edit Category'
+                                    : 'Add New Category'
+                            }}
+                        </h3>
 
-                    <form @submit.prevent="saveCategory" class="mt-4 space-y-4">
-                        <!-- Name -->
-                        <div>
-                            <label
-                                for="name"
-                                class="block text-sm font-medium text-gray-700"
-                                >Name</label
-                            >
-                            <input
-                                type="text"
-                                id="name"
-                                v-model="categoryForm.name"
-                                class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                                required
-                            />
-                        </div>
+                        <form @submit.prevent="saveCategory" class="space-y-4">
+                            <!-- Name -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Category Name
+                                </label>
+                                <input
+                                    type="text"
+                                    v-model="categoryForm.name"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                    required
+                                />
+                            </div>
 
-                        <!-- Description -->
-                        <div>
-                            <label
-                                for="description"
-                                class="block text-sm font-medium text-gray-700"
-                                >Description</label
-                            >
-                            <textarea
-                                id="description"
-                                v-model="categoryForm.description"
-                                rows="3"
-                                class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                                required
-                            ></textarea>
-                        </div>
+                            <!-- Description -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Description
+                                </label>
+                                <textarea
+                                    v-model="categoryForm.description"
+                                    rows="3"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                    required
+                                ></textarea>
+                            </div>
 
-                        <!-- Subcategories -->
-                        <div>
-                            <label
-                                for="subcategories"
-                                class="block text-sm font-medium text-gray-700"
-                            >
-                                Subcategories (comma-separated)
-                            </label>
-                            <input
-                                type="text"
-                                id="subcategories"
-                                v-model="subcategoriesInput"
-                                class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="e.g. Books, Magazines, Comics"
-                            />
-                        </div>
+                            <!-- Subcategories -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Subcategories (comma-separated)
+                                </label>
+                                <input
+                                    type="text"
+                                    v-model="subcategoriesInput"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                    placeholder="e.g. Tops, Jumpers, Jackets"
+                                />
+                            </div>
 
-                        <!-- Status -->
-                        <div>
-                            <label
-                                for="status"
-                                class="block text-sm font-medium text-gray-700"
-                                >Status</label
-                            >
-                            <select
-                                id="status"
-                                v-model="categoryForm.status"
-                                class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </form>
-
-                    <!-- Modal Actions -->
+                            <!-- Status -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Status
+                                </label>
+                                <select
+                                    v-model="categoryForm.status"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                >
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
                     <div
-                        class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
+                        class="bg-zinc-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
                     >
                         <button
-                            type="button"
                             @click="saveCategory"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
                         >
                             {{
                                 editingCategory
@@ -266,9 +307,8 @@
                             }}
                         </button>
                         <button
-                            type="button"
                             @click="closeModal"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-zinc-600 shadow-sm px-4 py-2 bg-black text-base font-medium text-zinc-300 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
                         >
                             Cancel
                         </button>
@@ -298,7 +338,7 @@ const categoryForm = ref({
 })
 const subcategoriesInput = ref('')
 
-// Computed
+// Computed Properties
 const filteredCategories = computed(() => {
     return categoriesData.filter(category => {
         const matchesSearch =
@@ -315,6 +355,23 @@ const filteredCategories = computed(() => {
 })
 
 // Methods
+const getStatusClass = status => {
+    const baseClasses =
+        'px-3 py-1 text-xs font-medium rounded-full border backdrop-blur-sm'
+    const statusClasses = {
+        active: 'bg-emerald-900/30 text-emerald-400 border-emerald-700/50',
+        inactive: 'bg-zinc-900/30 text-zinc-400 border-zinc-700/50',
+    }
+    return `${baseClasses} ${statusClasses[status]}`
+}
+
+const generateSlug = name => {
+    return name
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+}
+
 const openAddCategoryModal = () => {
     editingCategory.value = null
     categoryForm.value = {
@@ -329,12 +386,7 @@ const openAddCategoryModal = () => {
 
 const editCategory = category => {
     editingCategory.value = category
-    categoryForm.value = {
-        name: category.name,
-        description: category.description,
-        status: category.status,
-        subcategories: category.subcategories,
-    }
+    categoryForm.value = { ...category }
     subcategoriesInput.value = category.subcategories.join(', ')
     showModal.value = true
 }
@@ -361,10 +413,7 @@ const saveCategory = () => {
     const formData = {
         ...categoryForm.value,
         subcategories,
-        slug: categoryForm.value.name
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]+/g, ''),
+        slug: generateSlug(categoryForm.value.name),
     }
 
     if (editingCategory.value) {
@@ -394,7 +443,7 @@ const saveCategory = () => {
 const deleteCategory = categoryId => {
     if (
         confirm(
-            'Are you sure you want to delete this category? This action cannot be undone.',
+            'Are you sure you want to delete this category? This action cannot be undone and will affect all associated products.',
         )
     ) {
         const index = categoriesData.findIndex(c => c.id === categoryId)
@@ -404,3 +453,93 @@ const deleteCategory = categoryId => {
     }
 }
 </script>
+
+<style scoped>
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+/* Input autofill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #000000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Modal transition */
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+/* Category card hover effects */
+.group:hover .category-icon {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Font settings */
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Card hover animations */
+.group:hover .subcategory-tag {
+    border-color: rgb(168 85 247 / 0.5);
+    transition: border-color 0.2s ease-in-out;
+}
+
+/* Status badge hover effect */
+[class*='rounded-full']:hover {
+    filter: brightness(1.1);
+    transition: filter 0.2s ease-in-out;
+}
+
+/* Button focus ring offset fix for dark theme */
+button:focus {
+    --tw-ring-offset-color: #000000;
+}
+
+/* Gradient backgrounds */
+.bg-gradient {
+    background: linear-gradient(
+        135deg,
+        rgb(168 85 247 / 0.1),
+        rgb(168 85 247 / 0.05)
+    );
+}
+
+/* Textarea resize handling */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Card border glow effect on hover */
+.group:hover {
+    box-shadow: 0 0 20px rgb(168 85 247 / 0.1);
+}
+</style>

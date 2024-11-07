@@ -1,19 +1,23 @@
 <template>
-    <div>
+    <div class="min-h-screen bg-black">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
+        <div class="mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold text-white">Collections</h1>
-                <p class="text-blue-100 mt-1">
-                    Discover and manage your latest collections
+                <h1
+                    class="text-3xl font-bold text-white tracking-wider uppercase"
+                >
+                    Collections
+                </h1>
+                <p class="text-zinc-400 mt-1 tracking-wide">
+                    Curate and manage your featured collections
                 </p>
             </div>
             <button
                 @click="openAddCollectionModal"
-                class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-all duration-200 flex items-center shadow-sm"
+                class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center space-x-2 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
             >
                 <svg
-                    class="w-5 h-5 mr-2"
+                    class="w-5 h-5"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -25,44 +29,40 @@
                         stroke-linejoin="round"
                     />
                 </svg>
-                Add Collection
+                <span>Add Collection</span>
             </button>
         </div>
 
         <!-- Filters Section -->
-        <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
-            <div class="flex flex-wrap gap-4">
-                <!-- Search with Enhanced Styling -->
-                <div class="relative flex-1 min-w-[300px]">
-                    <span
-                        class="absolute inset-y-0 left-0 pl-3 flex items-center"
-                    >
-                        <svg
-                            class="h-5 w-5 text-gray-400"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                        >
-                            <path
-                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                    </span>
+        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Search -->
+                <div class="relative">
                     <input
                         type="text"
                         v-model="searchQuery"
-                        class="pl-10 pr-4 py-3 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                         placeholder="Search collections..."
                     />
+                    <svg
+                        class="w-5 h-5 absolute left-3 top-3 text-zinc-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <path
+                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
                 </div>
 
-                <!-- Enhanced Status Filter -->
+                <!-- Status Filter -->
                 <select
                     v-model="statusFilter"
-                    class="border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200 min-w-[150px]"
+                    class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                 >
                     <option value="">All Status</option>
                     <option value="active">Active</option>
@@ -72,95 +72,72 @@
             </div>
         </div>
 
-        <!-- Collections Grid with Enhanced Cards -->
+        <!-- Collections Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
                 v-for="collection in displayCollections"
                 :key="collection.id"
-                class="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
+                class="group bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300"
             >
-                <!-- Collection Image with Hover Effect -->
-                <div class="relative h-[600px] overflow-hidden">
+                <!-- Collection Image -->
+                <div class="relative h-[400px] overflow-hidden">
                     <img
                         :src="collection.featuredImage"
                         :alt="collection.name"
-                        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                     />
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"
+                    ></div>
+
+                    <!-- Status Badge -->
                     <div class="absolute top-4 right-4">
-                        <span
-                            class="px-3 py-1.5 text-xs font-semibold rounded-full shadow-sm"
-                            :class="getStatusClass(collection.status)"
-                        >
+                        <span :class="getStatusClass(collection.status)">
                             {{ collection.status }}
                         </span>
                     </div>
-                </div>
 
-                <!-- Collection Info with Enhanced Layout -->
-                <div class="p-6 space-y-4">
-                    <div>
+                    <!-- Collection Info Overlay -->
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
                         <h3
-                            class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200"
+                            class="text-xl font-bold text-white tracking-wider group-hover:text-purple-400 transition-colors duration-300"
                         >
                             {{ collection.name }}
                         </h3>
-                        <p class="mt-2 text-sm text-gray-600 line-clamp-2">
+                        <p class="mt-2 text-sm text-zinc-300 line-clamp-2">
                             {{ collection.description }}
                         </p>
                     </div>
+                </div>
 
-                    <!-- Stats with Icons -->
-                    <div
-                        class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100"
-                    >
-                        <div class="flex items-center text-sm">
-                            <svg
-                                class="w-4 h-4 text-gray-400 mr-2"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                            <span class="text-gray-600"
-                                >{{ collection.productsCount }} Products</span
-                            >
+                <!-- Collection Stats -->
+                <div class="p-6 space-y-4 border-t border-zinc-800">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
+                            <span class="text-sm text-zinc-400">Products</span>
+                            <p class="mt-1 text-lg font-mono text-white">
+                                {{ collection.productsCount }}
+                            </p>
                         </div>
-                        <div class="flex items-center text-sm">
-                            <svg
-                                class="w-4 h-4 text-gray-400 mr-2"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                            <span class="text-gray-600">{{
-                                formatDate(collection.startDate)
-                            }}</span>
+                        <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
+                            <span class="text-sm text-zinc-400">Duration</span>
+                            <p class="mt-1 text-sm font-mono text-white">
+                                {{ formatDate(collection.startDate) }}
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Actions with Enhanced Buttons -->
+                    <!-- Actions -->
                     <div
-                        class="flex justify-end space-x-3 pt-4 border-t border-gray-100"
+                        class="flex justify-end space-x-3 pt-4 border-t border-zinc-800"
                     >
                         <button
                             @click="editCollection(collection)"
-                            class="flex items-center text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200"
+                            class="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm flex items-center space-x-1"
                         >
                             <svg
-                                class="w-4 h-4 mr-1"
+                                class="w-4 h-4"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -172,14 +149,14 @@
                                     stroke-linejoin="round"
                                 />
                             </svg>
-                            Edit
+                            <span>Edit</span>
                         </button>
                         <button
                             @click="deleteCollection(collection.id)"
-                            class="flex items-center text-sm text-red-600 hover:text-red-700 transition-colors duration-200"
+                            class="text-red-400 hover:text-red-300 transition-colors duration-200 text-sm flex items-center space-x-1"
                         >
                             <svg
-                                class="w-4 h-4 mr-1"
+                                class="w-4 h-4"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -191,17 +168,17 @@
                                     stroke-linejoin="round"
                                 />
                             </svg>
-                            Delete
+                            <span>Delete</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Enhanced Modal -->
+        <!-- Collection Modal -->
         <div
             v-if="showModal"
-            class="fixed z-10 inset-0 overflow-y-auto"
+            class="fixed inset-0 z-50 overflow-y-auto"
             aria-labelledby="modal-title"
             role="dialog"
             aria-modal="true"
@@ -209,118 +186,124 @@
             <div
                 class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
             >
+                <!-- Background overlay -->
                 <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                    @click="closeModal"
+                    class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
+                    aria-hidden="true"
                 ></div>
 
                 <div
-                    class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+                    class="inline-block align-bottom bg-zinc-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
                 >
-                    <div class="sm:flex sm:items-start">
-                        <div
-                            class="mt-3 text-center sm:mt-0 sm:text-left w-full"
-                        >
-                            <h3 class="text-lg font-medium text-gray-900">
-                                {{
-                                    editingCollection
-                                        ? 'Edit Collection'
-                                        : 'Add New Collection'
-                                }}
-                            </h3>
+                    <div class="bg-zinc-900 px-4 pt-5 pb-4 sm:p-6">
+                        <h3 class="text-lg font-medium text-white mb-4">
+                            {{
+                                editingCollection
+                                    ? 'Edit Collection'
+                                    : 'Add New Collection'
+                            }}
+                        </h3>
 
-                            <form
-                                @submit.prevent="saveCollection"
-                                class="mt-6 space-y-4"
-                            >
+                        <form
+                            @submit.prevent="saveCollection"
+                            class="space-y-4"
+                        >
+                            <!-- Name -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Collection Name
+                                </label>
+                                <input
+                                    type="text"
+                                    v-model="collectionForm.name"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                    required
+                                />
+                            </div>
+
+                            <!-- Description -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Description
+                                </label>
+                                <textarea
+                                    v-model="collectionForm.description"
+                                    rows="3"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <!-- Dates -->
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700"
-                                        >Name</label
+                                        class="block text-sm font-medium text-zinc-400 mb-1"
                                     >
+                                        Start Date
+                                    </label>
                                     <input
-                                        type="text"
-                                        v-model="collectionForm.name"
-                                        class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        type="date"
+                                        v-model="collectionForm.startDate"
+                                        class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                         required
                                     />
                                 </div>
-
                                 <div>
                                     <label
-                                        class="block text-sm font-medium text-gray-700"
-                                        >Description</label
+                                        class="block text-sm font-medium text-zinc-400 mb-1"
                                     >
-                                    <textarea
-                                        v-model="collectionForm.description"
-                                        rows="3"
-                                        class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        End Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        v-model="collectionForm.endDate"
+                                        class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
                                         required
-                                    ></textarea>
+                                    />
                                 </div>
+                            </div>
 
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label
-                                            class="block text-sm font-medium text-gray-700"
-                                            >Start Date</label
-                                        >
-                                        <input
-                                            type="date"
-                                            v-model="collectionForm.startDate"
-                                            class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label
-                                            class="block text-sm font-medium text-gray-700"
-                                            >End Date</label
-                                        >
-                                        <input
-                                            type="date"
-                                            v-model="collectionForm.endDate"
-                                            class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-gray-700"
-                                        >Status</label
-                                    >
-                                    <select
-                                        v-model="collectionForm.status"
-                                        class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    >
-                                        <option value="active">Active</option>
-                                        <option value="scheduled">
-                                            Scheduled
-                                        </option>
-                                        <option value="ended">Ended</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
+                            <!-- Status -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                >
+                                    Status
+                                </label>
+                                <select
+                                    v-model="collectionForm.status"
+                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                >
+                                    <option value="active">Active</option>
+                                    <option value="scheduled">Scheduled</option>
+                                    <option value="ended">Ended</option>
+                                </select>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3">
-                        <button
-                            @click="closeModal"
-                            class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
-                        >
-                            Cancel
-                        </button>
+                    <div
+                        class="bg-zinc-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+                    >
                         <button
                             @click="saveCollection"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
                         >
                             {{
                                 editingCollection
                                     ? 'Save Changes'
                                     : 'Add Collection'
                             }}
+                        </button>
+                        <button
+                            @click="closeModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-zinc-600 shadow-sm px-4 py-2 bg-black text-base font-medium text-zinc-300 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-200"
+                        >
+                            Cancel
                         </button>
                     </div>
                 </div>
@@ -336,6 +319,8 @@ import { collectionsData } from './MenuConfig'
 // Search and Filter
 const searchQuery = ref('')
 const statusFilter = ref('')
+
+// Modal and Form
 const showModal = ref(false)
 const editingCollection = ref(null)
 const collectionForm = ref({
@@ -346,7 +331,7 @@ const collectionForm = ref({
     endDate: '',
 })
 
-// Methods
+// Computed Properties
 const displayCollections = computed(() => {
     return collectionsData.filter(collection => {
         const matchesSearch = collection.name
@@ -358,21 +343,23 @@ const displayCollections = computed(() => {
     })
 })
 
+// Methods
 const getStatusClass = status => {
-    return (
-        {
-            active: 'bg-green-100 text-green-800',
-            scheduled: 'bg-blue-100 text-blue-800',
-            ended: 'bg-red-100 text-red-800',
-        }[status] || 'bg-gray-100 text-gray-800'
-    )
+    const baseClasses =
+        'px-3 py-1 text-xs font-medium rounded-full border backdrop-blur-sm'
+    const statusClasses = {
+        active: 'bg-emerald-900/30 text-emerald-400 border-emerald-700/50',
+        scheduled: 'bg-blue-900/30 text-blue-400 border-blue-700/50',
+        ended: 'bg-zinc-900/30 text-zinc-400 border-zinc-700/50',
+    }
+    return `${baseClasses} ${statusClasses[status]}`
 }
 
 const formatDate = date => {
     return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
         month: 'short',
         day: 'numeric',
-        year: 'numeric',
     })
 }
 
@@ -397,10 +384,18 @@ const editCollection = collection => {
 const closeModal = () => {
     showModal.value = false
     editingCollection.value = null
+    collectionForm.value = {
+        name: '',
+        description: '',
+        status: 'active',
+        startDate: '',
+        endDate: '',
+    }
 }
 
 const saveCollection = () => {
     if (editingCollection.value) {
+        // Update existing collection
         const index = collectionsData.findIndex(
             c => c.id === editingCollection.value.id,
         )
@@ -411,6 +406,7 @@ const saveCollection = () => {
             }
         }
     } else {
+        // Add new collection
         const newCollection = {
             id: collectionsData.length + 1,
             ...collectionForm.value,
@@ -423,12 +419,120 @@ const saveCollection = () => {
     closeModal()
 }
 
-const deleteCollection = id => {
-    if (confirm('Are you sure you want to delete this collection?')) {
-        const index = collectionsData.findIndex(c => c.id === id)
+const deleteCollection = collectionId => {
+    if (
+        confirm(
+            'Are you sure you want to delete this collection? This action cannot be undone.',
+        )
+    ) {
+        const index = collectionsData.findIndex(c => c.id === collectionId)
         if (index !== -1) {
             collectionsData.splice(index, 1)
         }
     }
 }
 </script>
+
+<style scoped>
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+/* Input autofill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #000000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Modal transition */
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+/* Image hover effect */
+.group:hover .transform {
+    transform: scale(1.05);
+}
+
+/* Gradient overlay */
+.from-black\/80 {
+    --tw-gradient-from: rgb(0 0 0 / 0.8);
+    --tw-gradient-to: rgb(0 0 0 / 0);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+/* Font settings */
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Card hover effect */
+.hover\:border-purple-500\/50:hover {
+    border-color: rgb(168 85 247 / 0.5);
+}
+
+/* Status badge hover effect */
+[class*='rounded-full']:hover {
+    filter: brightness(1.1);
+    transition: filter 0.2s ease-in-out;
+}
+
+/* Date input color fix for webkit browsers */
+input[type='date'] {
+    color-scheme: dark;
+}
+
+/* Textarea resize handling */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Collection card image gradient overlay */
+.collection-image-overlay {
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0) 100%
+    );
+}
+
+/* Collection card hover effects */
+.collection-card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.collection-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Button focus ring offset fix for dark theme */
+button:focus {
+    --tw-ring-offset-color: #000000;
+}
+</style>
