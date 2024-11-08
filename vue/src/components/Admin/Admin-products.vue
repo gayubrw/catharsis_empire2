@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-black">
+    <div class="min-h-screen bg-black p-28">
         <!-- Search and Filter Section -->
         <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
             <div
@@ -106,7 +106,7 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-800">
                         <tr
-                            v-for="product in filteredProducts"
+                            v-for="product in paginatedProducts"
                             :key="product.id"
                             class="hover:bg-zinc-800/50 transition-colors duration-200"
                         >
@@ -437,7 +437,7 @@ const categoryFilter = ref('')
 const statusFilter = ref('')
 
 // Pagination
-const itemsPerPage = 8
+const itemsPerPage = 4
 const currentPage = ref(1)
 
 // Modal and Form
@@ -472,6 +472,10 @@ const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage)
 const endIndex = computed(() =>
     Math.min(startIndex.value + itemsPerPage, totalProducts.value),
 )
+
+const paginatedProducts = computed(() => {
+    return filteredProducts.value.slice(startIndex.value, endIndex.value)
+})
 
 const displayedPages = computed(() => {
     const pages = []

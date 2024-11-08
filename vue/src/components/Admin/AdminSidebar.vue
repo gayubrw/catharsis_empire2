@@ -1,22 +1,7 @@
 <template>
-    <aside
-        class="fixed inset-y-0 left-0 w-64 bg-black border-r border-zinc-800"
-    >
-        <!-- Logo -->
-        <div
-            class="flex items-center justify-center h-24 bg-zinc-900/50 border-b border-zinc-800"
-        >
-            <h1
-                class="text-white text-2xl font-bold tracking-[0.2em] uppercase"
-            >
-                CATHARSIS
-            </h1>
-        </div>
-
+    <aside class="fixed left-0 bottom-0 w-64 bg-black" style="top: 96px">
         <!-- Store Link -->
-        <div
-            class="flex items-center justify-center py-4 border-b border-zinc-800"
-        >
+        <div class="flex items-center justify-center py-4">
             <router-link
                 to="/"
                 class="text-zinc-400 hover:text-purple-400 transition-colors duration-200 uppercase text-sm tracking-wider flex items-center space-x-2"
@@ -43,8 +28,9 @@
                     :to="item.path"
                     class="flex items-center px-4 py-3 text-zinc-400 rounded-lg transition-all duration-200 hover:bg-zinc-800/50 group"
                     :class="{
-                        'bg-purple-500/10 text-purple-400 border border-purple-500/20':
-                            isCurrentRoute(item.path),
+                        'bg-purple-500/10 text-purple-400': isCurrentRoute(
+                            item.path,
+                        ),
                     }"
                 >
                     <div
@@ -79,9 +65,7 @@
         </nav>
 
         <!-- Bottom Section -->
-        <div
-            class="absolute bottom-0 left-0 right-0 p-6 border-t border-zinc-800"
-        >
+        <div class="absolute bottom-0 left-0 right-0 p-6">
             <div
                 class="flex items-center justify-between text-sm text-zinc-400"
             >

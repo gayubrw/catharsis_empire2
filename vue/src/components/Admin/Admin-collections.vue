@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-black">
+    <div class="min-h-screen bg-black p-28">
         <!-- Header -->
         <div class="mb-8 flex justify-between items-center">
             <div>
@@ -80,7 +80,7 @@
                 class="group bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300"
             >
                 <!-- Collection Image -->
-                <div class="relative h-[400px] overflow-hidden">
+                <div class="relative h-[600px] overflow-hidden">
                     <img
                         :src="collection.featuredImage"
                         :alt="collection.name"

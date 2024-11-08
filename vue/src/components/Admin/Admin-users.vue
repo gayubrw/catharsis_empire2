@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-black">
+    <div class="min-h-screen bg-black p-28">
         <!-- Header -->
         <div class="mb-8">
             <div class="flex justify-between items-center">
@@ -108,7 +108,7 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-800">
                         <tr
-                            v-for="user in filteredUsers"
+                            v-for="user in paginatedUsers"
                             :key="user.id"
                             class="hover:bg-zinc-800/50 transition-colors duration-200"
                         >
@@ -339,7 +339,7 @@ const roleFilter = ref('')
 const statusFilter = ref('')
 
 // Pagination
-const itemsPerPage = 8
+const itemsPerPage = 4 // Changed from 8 to 4
 const currentPage = ref(1)
 
 // Modal and Form
@@ -371,6 +371,10 @@ const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage)
 const endIndex = computed(() =>
     Math.min(startIndex.value + itemsPerPage, totalUsers.value),
 )
+
+const paginatedUsers = computed(() => {
+    return filteredUsers.value.slice(startIndex.value, endIndex.value)
+})
 
 const displayedPages = computed(() => {
     const pages = []
