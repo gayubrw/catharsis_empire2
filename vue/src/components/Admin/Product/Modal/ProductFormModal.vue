@@ -216,6 +216,70 @@
                                 {{ errors.collection }}
                             </p>
                         </div>
+
+                        <!-- Image Upload Section -->
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-zinc-400 mb-1"
+                            >
+                                Product Image
+                            </label>
+                            <div
+                                class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-zinc-800 border-dashed rounded-lg hover:border-purple-500/50 transition-colors"
+                            >
+                                <div class="space-y-2 text-center">
+                                    <div v-if="imagePreview" class="mb-4">
+                                        <img
+                                            :src="imagePreview"
+                                            alt="Preview"
+                                            class="mx-auto h-32 w-32 object-cover rounded-lg"
+                                        />
+                                    </div>
+                                    <div v-else class="mx-auto h-12 w-12">
+                                        <svg
+                                            class="mx-auto h-12 w-12 text-zinc-400"
+                                            stroke="currentColor"
+                                            fill="none"
+                                            viewBox="0 0 48 48"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="flex text-sm text-zinc-400">
+                                        <label
+                                            for="file-upload"
+                                            class="relative cursor-pointer rounded-md font-medium text-purple-500 hover:text-purple-400 focus-within:outline-none"
+                                        >
+                                            <span>Upload a file</span>
+                                            <input
+                                                id="file-upload"
+                                                name="file-upload"
+                                                type="file"
+                                                accept="image/*"
+                                                class="sr-only"
+                                                @change="handleImageUpload"
+                                            />
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-zinc-400">
+                                        PNG, JPG, GIF up to 10MB
+                                    </p>
+                                </div>
+                            </div>
+                            <p
+                                v-if="errors.image"
+                                class="mt-1 text-sm text-red-500"
+                            >
+                                {{ errors.image }}
+                            </p>
+                        </div>
                     </form>
                 </div>
 
@@ -296,18 +360,49 @@ const emit = defineEmits(['update:modelValue', 'save'])
 // Form State
 const isSubmitting = ref(false)
 const errors = ref({})
-
+const imagePreview = ref(null)
+const imageFile = ref(null)
 const defaultForm = {
     name: '',
-    description: '', // Add description field
+    description: '',
     price: 0,
     category: '',
     sizeStock: {},
     collection: '',
-    image: '/api/placeholder/80/80',
+    image: null,
 }
 
 const form = ref({ ...defaultForm })
+
+const handleImageUpload = event => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+        errors.value.image = 'Please upload an image file (PNG, JPG, GIF)'
+        return
+    }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        errors.value.image = 'Image size should be less than 10MB'
+        return
+    }
+
+    // Clear previous error
+    errors.value.image = ''
+
+    // Store file for form submission
+    imageFile.value = file
+
+    // Create preview URL
+    imagePreview.value = URL.createObjectURL(file)
+
+    // Update form data
+    form.value.image = file
+}
 
 // Computed
 const isEditing = computed(() => !!props.product)
@@ -356,6 +451,11 @@ const validateForm = () => {
         newErrors.category = 'Category is required'
     }
 
+    // Add image validation if needed
+    if (!isEditing.value && !form.value.image) {
+        newErrors.image = 'Product image is required'
+    }
+
     errors.value = newErrors
     return Object.keys(newErrors).length === 0
 }
@@ -366,10 +466,22 @@ const handleSubmit = async () => {
     try {
         isSubmitting.value = true
 
-        const formData = {
-            ...form.value,
-            lastUpdated: new Date().toISOString().split('T')[0],
-        }
+        // Create FormData for multipart/form-data submission
+        const formData = new FormData()
+
+        // Append all form fields
+        Object.keys(form.value).forEach(key => {
+            if (key === 'sizeStock') {
+                formData.append(key, JSON.stringify(form.value[key]))
+            } else if (key === 'image' && form.value[key] instanceof File) {
+                formData.append('image', form.value[key])
+            } else {
+                formData.append(key, form.value[key])
+            }
+        })
+
+        // Add last updated date
+        formData.append('lastUpdated', new Date().toISOString().split('T')[0])
 
         emit('save', formData)
         closeModal()
@@ -381,6 +493,12 @@ const handleSubmit = async () => {
 }
 
 const closeModal = () => {
+    if (imagePreview.value) {
+        URL.revokeObjectURL(imagePreview.value)
+        imagePreview.value = null
+        imageFile.value = null
+    }
+
     emit('update:modelValue', false)
     form.value = { ...defaultForm }
     errors.value = {}
@@ -392,6 +510,10 @@ onMounted(() => {
         form.value = {
             ...props.product,
             sizeStock: { ...props.product.sizeStock },
+        }
+        // Set image preview if product has an image
+        if (props.product.image) {
+            imagePreview.value = props.product.image
         }
     } else {
         form.value.sizeStock = initializeSizeStock()
