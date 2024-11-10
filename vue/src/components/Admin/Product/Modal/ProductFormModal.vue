@@ -64,6 +64,22 @@
                             </p>
                         </div>
 
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-zinc-400 mb-1"
+                                >Description</label
+                            >
+                            <textarea
+                                v-model="form.description"
+                                rows="12"
+                                class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300 font-mono"
+                                placeholder="Enter product description..."
+                            ></textarea>
+                            <p class="mt-1 text-xs text-zinc-500">
+                                Use new lines to format the description
+                            </p>
+                        </div>
+
                         <!-- Price -->
                         <div>
                             <label
@@ -283,6 +299,7 @@ const errors = ref({})
 
 const defaultForm = {
     name: '',
+    description: '', // Add description field
     price: 0,
     category: '',
     sizeStock: {},

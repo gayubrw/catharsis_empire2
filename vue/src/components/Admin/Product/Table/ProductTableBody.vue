@@ -24,6 +24,29 @@
                         <div class="text-sm text-zinc-400">
                             Last updated: {{ formatDate(product.lastUpdated) }}
                         </div>
+                        <div
+                            class="text-sm text-zinc-500 mt-2 whitespace-pre-line"
+                        >
+                            <div v-if="!expandedProducts[product.id]">
+                                {{ truncateText(product.description) }}
+                                <button
+                                    v-if="product.description?.length > 35"
+                                    @click="toggleDescription(product.id)"
+                                    class="text-emerald-400 hover:text-emerald-300 text-xs ml-1 transition-colors duration-200"
+                                >
+                                    Lihat Selengkapnya
+                                </button>
+                            </div>
+                            <div v-else>
+                                {{ product.description }}
+                                <button
+                                    @click="toggleDescription(product.id)"
+                                    class="text-emerald-400 hover:text-emerald-300 text-xs ml-1 transition-colors duration-200"
+                                >
+                                    Lihat Lebih Sedikit
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </td>
@@ -103,56 +126,11 @@
                 </button>
             </td>
         </tr>
-
-        <!-- Empty State -->
-        <tr v-if="products.length === 0">
-            <td colspan="7" class="px-6 py-12">
-                <div class="text-center">
-                    <svg
-                        class="mx-auto h-12 w-12 text-zinc-500"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <path
-                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium text-zinc-400">
-                        No products
-                    </h3>
-                    <p class="mt-1 text-sm text-zinc-500">
-                        Get started by creating a new product.
-                    </p>
-                    <div class="mt-6">
-                        <button
-                            @click="$emit('add-product')"
-                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                        >
-                            <svg
-                                class="-ml-1 mr-2 h-5 w-5"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                            Add Product
-                        </button>
-                    </div>
-                </div>
-            </td>
-        </tr>
     </tbody>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { collectionsData } from '@/components/Admin/MenuConfig'
 
 defineProps({
@@ -163,6 +141,20 @@ defineProps({
 })
 
 defineEmits(['edit', 'delete', 'view-stock', 'add-product'])
+
+// State for expanded descriptions
+const expandedProducts = ref({})
+
+// Toggle description visibility
+const toggleDescription = productId => {
+    expandedProducts.value[productId] = !expandedProducts.value[productId]
+}
+
+// Truncate text function
+const truncateText = text => {
+    if (!text) return ''
+    return text.length > 35 ? text.slice(0, 35) + '...' : text
+}
 
 // Utility functions
 const formatPrice = price => {

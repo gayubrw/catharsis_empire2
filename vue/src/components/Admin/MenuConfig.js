@@ -207,6 +207,20 @@ export const productsData = [
     {
         id: 1,
         name: 'Project DYSTOPIAN - Spectrum',
+        description: `Project DYSTOPIAN - Spectrum (Tees)
+
+Width x Length x Sleeve
+
+S: 50 x 70 x 21
+M : 53 x 72 x 22
+L : 56 x 76 x 24
+XL : 59 x 78 x 25
+XXL : 62 x 80 x 26
+
+
+*Consider 1 - 2 cm sizing tolerance due to manual measurement.
+
+*Everything that the Empire constructs have passed prudent QUALITY CHECKs. However, in extreme cases where you found errors in our creation, please don't hesitate to submit your complaints to our admin before you rate our masterpieces.`,
         price: 369000,
         category: 'Tops',
         sizeStock: {
