@@ -223,6 +223,7 @@ XXL : 62 x 80 x 26
 *Everything that the Empire constructs have passed prudent QUALITY CHECKs. However, in extreme cases where you found errors in our creation, please don't hesitate to submit your complaints to our admin before you rate our masterpieces.`,
         price: 369000,
         category: 'Tops',
+        totalStock: '666',
         sizeStock: {
             S: 100,
             M: 200,
@@ -237,6 +238,7 @@ XXL : 62 x 80 x 26
     {
         id: 2,
         name: 'Project DYSTOPIAN - Purpureal',
+        description: ``,
         price: 196000,
         category: 'Tops',
         sizeStock: {
@@ -253,6 +255,7 @@ XXL : 62 x 80 x 26
     {
         id: 3,
         name: 'Project DYSTOPIAN - Mutation',
+        description: ``,
         price: 196000,
         category: 'Accessories',
         sizeStock: {
@@ -269,6 +272,7 @@ XXL : 62 x 80 x 26
     {
         id: 4,
         name: 'Project DYSTOPIAN - Umbra',
+        description: ``,
         price: 96000,
         category: 'Accessories',
         sizeStock: {
@@ -282,6 +286,7 @@ XXL : 62 x 80 x 26
     {
         id: 5,
         name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
+        description: ``,
         price: 969000,
         category: 'Jackets',
         sizeStock: {

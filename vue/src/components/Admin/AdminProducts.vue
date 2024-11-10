@@ -1,3 +1,4 @@
+// AdminProducts.vue
 <template>
     <div class="min-h-screen bg-black p-28">
         <!-- Stats Cards -->
@@ -56,9 +57,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
-    productsData,
+    productsData as initialProductsData,
     productCategories,
     collectionsData,
     availableSizes,
@@ -74,10 +75,11 @@ import StockDetailsModal from './Product/Modal/StockDetailsModal.vue'
 import DeleteConfirmationModal from './Product/Modal/DeleteConfirmationModal.vue'
 
 // State
+const products = ref([]) // New reactive products array
 const searchQuery = ref('')
 const categoryFilter = ref('')
 const statusFilter = ref('')
-const collectionFilter = ref('') // Add collection filter
+const collectionFilter = ref('')
 const showModal = ref(false)
 const showStockModal = ref(false)
 const showDeleteModal = ref(false)
@@ -87,9 +89,14 @@ const productToDelete = ref(null)
 const currentPage = ref(1)
 const itemsPerPage = 4
 
+// Initialize products data
+onMounted(() => {
+    products.value = JSON.parse(JSON.stringify(initialProductsData))
+})
+
 // Computed
 const filteredProducts = computed(() => {
-    return productsData.filter(product => {
+    return products.value.filter(product => {
         const matchesSearch = product.name
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase())
@@ -134,7 +141,8 @@ const openAddProductModal = () => {
 }
 
 const editProduct = product => {
-    editingProduct.value = product
+    // Create a deep copy of the product to avoid direct mutations
+    editingProduct.value = JSON.parse(JSON.stringify(product))
     showModal.value = true
 }
 
@@ -157,11 +165,19 @@ const deleteProduct = productId => {
 
 const confirmDelete = () => {
     if (productToDelete.value) {
-        const index = productsData.findIndex(
+        const index = products.value.findIndex(
             p => p.id === productToDelete.value,
         )
         if (index !== -1) {
-            productsData.splice(index, 1)
+            products.value.splice(index, 1)
+
+            // Reset pagination if necessary
+            const maxPage = Math.ceil(
+                filteredProducts.value.length / itemsPerPage,
+            )
+            if (currentPage.value > maxPage) {
+                currentPage.value = Math.max(1, maxPage)
+            }
         }
     }
     showDeleteModal.value = false
@@ -169,21 +185,43 @@ const confirmDelete = () => {
 }
 
 const saveProduct = formData => {
+    // Convert FormData to a regular object
+    const productData = {}
+    formData.forEach((value, key) => {
+        if (key === 'sizeStock') {
+            productData[key] = JSON.parse(value)
+        } else if (key === 'price') {
+            productData[key] = parseFloat(value)
+        } else if (key === 'collection') {
+            productData[key] = parseInt(value)
+        } else {
+            productData[key] = value
+        }
+    })
+
     if (editingProduct.value) {
-        const index = productsData.findIndex(
+        // Update existing product
+        const index = products.value.findIndex(
             p => p.id === editingProduct.value.id,
         )
         if (index !== -1) {
-            productsData[index] = { ...productsData[index], ...formData }
+            // Merge the existing product with new data
+            products.value[index] = {
+                ...products.value[index],
+                ...productData,
+                lastUpdated: new Date().toISOString().split('T')[0],
+            }
         }
     } else {
+        // Create new product
         const newProduct = {
-            id: Math.max(...productsData.map(p => p.id)) + 1,
-            ...formData,
+            id: Math.max(0, ...products.value.map(p => p.id)) + 1,
+            ...productData,
             lastUpdated: new Date().toISOString().split('T')[0],
         }
-        productsData.push(newProduct)
+        products.value.push(newProduct)
     }
+
     showModal.value = false
     editingProduct.value = null
 }

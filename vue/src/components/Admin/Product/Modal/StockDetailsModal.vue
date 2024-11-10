@@ -42,6 +42,46 @@
                 </div>
 
                 <div v-if="product" class="p-6 space-y-6">
+                    <!-- Total Stock Summary Card -->
+                    <div
+                        class="bg-purple-900/30 rounded-xl p-4 border border-purple-700/50"
+                    >
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span
+                                    class="text-sm font-medium text-purple-200"
+                                    >Total Stock</span
+                                >
+                                <div class="mt-1 flex items-baseline">
+                                    <span
+                                        class="text-2xl font-semibold text-purple-300"
+                                    >
+                                        {{ getTotalStock(product.sizeStock) }}
+                                    </span>
+                                    <span class="ml-2 text-sm text-purple-400"
+                                        >units</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="p-3 bg-purple-800/30 rounded-lg">
+                                <svg
+                                    class="w-6 h-6 text-purple-400"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Size Stock Grid -->
                     <div class="grid grid-cols-2 gap-4">
                         <div
                             v-for="(stock, size) in product.sizeStock"
@@ -59,38 +99,26 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <div
-                            class="flex items-center justify-between p-4 bg-zinc-800/30 rounded-xl border border-zinc-700/50"
+                    <!-- Status Summary -->
+                    <div
+                        class="flex items-center justify-between p-4 bg-zinc-800/30 rounded-xl border border-zinc-700/50"
+                    >
+                        <span class="text-sm font-medium text-zinc-300"
+                            >Status</span
                         >
-                            <span class="text-sm font-medium text-zinc-300"
-                                >Total Stock</span
-                            >
-                            <span class="text-sm font-medium text-purple-400">
-                                {{ getTotalStock(product.sizeStock) }}
-                            </span>
-                        </div>
-
-                        <div
-                            class="flex items-center justify-between p-4 bg-zinc-800/30 rounded-xl border border-zinc-700/50"
+                        <span
+                            :class="
+                                getStatusClass(
+                                    getOverallStatus(product.sizeStock),
+                                )
+                            "
                         >
-                            <span class="text-sm font-medium text-zinc-300"
-                                >Status</span
-                            >
-                            <span
-                                :class="
-                                    getStatusClass(
-                                        getOverallStatus(product.sizeStock),
-                                    )
-                                "
-                            >
-                                {{
-                                    formatStatus(
-                                        getOverallStatus(product.sizeStock),
-                                    )
-                                }}
-                            </span>
-                        </div>
+                            {{
+                                formatStatus(
+                                    getOverallStatus(product.sizeStock),
+                                )
+                            }}
+                        </span>
                     </div>
                 </div>
 

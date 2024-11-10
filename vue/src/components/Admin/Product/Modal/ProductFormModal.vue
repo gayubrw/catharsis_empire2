@@ -1,4 +1,3 @@
-// src/components/Admin/Product/Modal/ProductFormModal.vue
 <template>
     <div class="fixed inset-0 z-50 overflow-y-auto">
         <div
@@ -112,23 +111,54 @@
 
                         <!-- Size Stock -->
                         <div>
-                            <label
-                                class="block text-sm font-medium text-zinc-400 mb-2"
-                            >
-                                Stock by Size
-                            </label>
+                            <div class="flex items-center justify-between mb-2">
+                                <label
+                                    class="text-sm font-medium text-zinc-400"
+                                >
+                                    Stock by Size
+                                </label>
+                                <div
+                                    class="bg-purple-900/30 px-3 py-1 rounded-lg border border-purple-700/50"
+                                >
+                                    <span
+                                        class="text-sm font-medium text-purple-200"
+                                    >
+                                        Total Stock:
+                                        <span class="text-purple-300 font-mono">
+                                            {{ calculateTotalStock }}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div
                                     v-for="size in availableSizes"
                                     :key="size"
                                     class="relative bg-zinc-800/30 rounded-xl p-4 border border-zinc-700/50"
                                 >
-                                    <label
-                                        :for="'size-' + size"
-                                        class="text-sm font-medium text-zinc-300 mb-2"
+                                    <div
+                                        class="flex items-center justify-between"
                                     >
-                                        Size {{ size }}
-                                    </label>
+                                        <label
+                                            :for="'size-' + size"
+                                            class="text-sm font-medium text-zinc-300 mb-2"
+                                        >
+                                            Size {{ size }}
+                                        </label>
+                                        <span
+                                            :class="
+                                                getStockBadgeClass(
+                                                    form.sizeStock[size] || 0,
+                                                )
+                                            "
+                                        >
+                                            {{
+                                                getStockLabel(
+                                                    form.sizeStock[size] || 0,
+                                                )
+                                            }}
+                                        </span>
+                                    </div>
                                     <input
                                         :id="'size-' + size"
                                         type="number"
@@ -137,21 +167,6 @@
                                         min="0"
                                         placeholder="0"
                                     />
-                                    <div class="absolute top-2 right-2">
-                                        <span
-                                            :class="
-                                                getStockBadgeClass(
-                                                    form.sizeStock[size],
-                                                )
-                                            "
-                                        >
-                                            {{
-                                                getStockLabel(
-                                                    form.sizeStock[size],
-                                                )
-                                            }}
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -423,17 +438,30 @@ const formatCategory = category => {
         .join(' ')
 }
 
-const getStockBadgeClass = stock => {
-    const baseClasses = 'px-2 py-1 rounded-md text-xs font-medium'
-    if (stock > 10) return `${baseClasses} bg-emerald-500/20 text-emerald-400`
-    if (stock > 0) return `${baseClasses} bg-yellow-500/20 text-yellow-400`
-    return `${baseClasses} bg-red-500/20 text-red-400`
+// Add new computed property for total stock
+const calculateTotalStock = computed(() => {
+    return Object.values(form.value.sizeStock).reduce((sum, stock) => {
+        const stockNumber = Number(stock) || 0
+        return sum + stockNumber
+    }, 0)
+})
+
+// Update stock label function to show actual numbers
+const getStockLabel = stock => {
+    const stockNum = Number(stock) || 0
+    if (stockNum > 10) return `${stockNum} • In Stock`
+    if (stockNum > 0) return `${stockNum} • Low`
+    return '0 • Out'
 }
 
-const getStockLabel = stock => {
-    if (stock > 10) return 'In Stock'
-    if (stock > 0) return 'Low'
-    return 'Out'
+// Update stock badge class to handle undefined values
+const getStockBadgeClass = stock => {
+    const stockNum = Number(stock) || 0
+    const baseClasses = 'px-2 py-1 rounded-md text-xs font-medium'
+    if (stockNum > 10)
+        return `${baseClasses} bg-emerald-500/20 text-emerald-400`
+    if (stockNum > 0) return `${baseClasses} bg-yellow-500/20 text-yellow-400`
+    return `${baseClasses} bg-red-500/20 text-red-400`
 }
 
 const validateForm = () => {
