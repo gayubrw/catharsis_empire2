@@ -193,7 +193,15 @@ export const tableHeaders = [
     { key: 'lastLogin', label: 'Last Login' },
 ]
 
-export const availableSizes = ['S', 'M', 'L', 'XL', 'XXL']
+export const availableSizes = [
+    'S',
+    'M',
+    'L',
+    'XL',
+    'XXL',
+    'Mid Calf',
+    'Quarter',
+]
 
 export const productsData = [
     {
@@ -250,11 +258,8 @@ export const productsData = [
         price: 96000,
         category: 'Accessories',
         sizeStock: {
-            S: 0,
-            M: 0,
-            L: 0,
-            XL: 0,
-            XXL: 0,
+            'Mid Calf': 0,
+            Quarter: 0,
         },
         image: '/dystopian4.jpg',
         collection: 1,

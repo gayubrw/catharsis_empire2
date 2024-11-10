@@ -1,0 +1,6 @@
+export { default as ProductStatsCards } from './Card/ProductStatsCards.vue'
+export { default as ProductSearchFilter } from './Filter/ProductSearchFilter.vue'
+export { default as ProductTable } from './Table/ProductTable.vue'
+export { default as ProductFormModal } from './Modal/ProductFormModal.vue'
+export { default as StockDetailsModal } from './Modal/StockDetailsModal.vue'
+export { default as DeleteConfirmationModal } from './Modal/DeleteConfirmationModal.vue'
