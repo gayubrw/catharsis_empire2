@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-screen bg-black p-28">
-        <!-- Header -->
-        <div class="mb-8 flex justify-between items-center">
-            <div>
+        <!-- Header with Search and Filters -->
+        <div class="mb-8">
+            <div class="flex items-start justify-between mb-6">
                 <div class="flex items-center gap-4">
                     <button
                         @click="goBackToCategories"
@@ -35,30 +35,9 @@
                     </div>
                 </div>
             </div>
-            <button
-                @click="openAddProductModal"
-                class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center space-x-2 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
-            >
-                <svg
-                    class="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                >
-                    <path
-                        d="M12 4v16m8-8H4"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                </svg>
-                <span>Add Product</span>
-            </button>
-        </div>
 
-        <!-- Search and Filter Section -->
-        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Integrated Search and Filter -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Search -->
                 <div class="relative">
                     <input
@@ -106,7 +85,7 @@
                             <th
                                 class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
                             >
-                                Product
+                                Product Info
                             </th>
                             <th
                                 class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
@@ -119,11 +98,6 @@
                                 Status
                             </th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
-                            >
-                                Stock
-                            </th>
-                            <th
                                 class="px-6 py-4 text-right text-xs font-medium text-zinc-400 uppercase tracking-wider"
                             >
                                 Actions
@@ -132,7 +106,7 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-800">
                         <tr
-                            v-for="product in displayProducts"
+                            v-for="product in filteredProducts"
                             :key="product.id"
                             class="hover:bg-zinc-800/50 transition-colors duration-200"
                         >
@@ -153,6 +127,34 @@
                                         >
                                             {{ product.name }}
                                         </div>
+                                        <!-- Size Stock Info -->
+                                        <div
+                                            class="mt-1 grid grid-cols-5 gap-2"
+                                        >
+                                            <div
+                                                v-for="(
+                                                    stock, size
+                                                ) in product.sizeStock"
+                                                :key="size"
+                                                class="text-xs px-2 py-1 rounded bg-zinc-800/50 border border-zinc-700"
+                                            >
+                                                <span class="text-zinc-400"
+                                                    >{{ size }}:</span
+                                                >
+                                                <span
+                                                    :class="{
+                                                        'text-emerald-400':
+                                                            stock > 10,
+                                                        'text-yellow-400':
+                                                            stock <= 10 &&
+                                                            stock > 0,
+                                                        'text-red-400':
+                                                            stock === 0,
+                                                    }"
+                                                    >{{ stock }}</span
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -162,14 +164,19 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span :class="getStatusClass(product.status)">
-                                    {{ formatStatus(product.status) }}
+                                <span
+                                    :class="
+                                        getStatusClass(
+                                            getOverallStatus(product.sizeStock),
+                                        )
+                                    "
+                                >
+                                    {{
+                                        formatStatus(
+                                            getOverallStatus(product.sizeStock),
+                                        )
+                                    }}
                                 </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-zinc-300 font-mono">
-                                    {{ product.stock }}
-                                </div>
                             </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-right space-x-3"
@@ -194,20 +201,12 @@
         </div>
 
         <!-- Product Modal -->
-        <div
-            v-if="showModal"
-            class="fixed inset-0 z-50 overflow-y-auto"
-            aria-labelledby="modal-title"
-            role="dialog"
-            aria-modal="true"
-        >
+        <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto">
             <div
                 class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
             >
-                <!-- Background overlay -->
                 <div
                     class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
-                    aria-hidden="true"
                 ></div>
 
                 <div
@@ -261,39 +260,34 @@
                                 </div>
                             </div>
 
-                            <!-- Stock -->
+                            <!-- Size Stock -->
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-zinc-400 mb-1"
+                                    class="block text-sm font-medium text-zinc-400 mb-2"
                                 >
-                                    Stock
+                                    Stock by Size
                                 </label>
-                                <input
-                                    type="number"
-                                    v-model="productForm.stock"
-                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                                    required
-                                    min="0"
-                                />
-                            </div>
-
-                            <!-- Status -->
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-zinc-400 mb-1"
-                                >
-                                    Status
-                                </label>
-                                <select
-                                    v-model="productForm.status"
-                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                                >
-                                    <option value="in_stock">In Stock</option>
-                                    <option value="low_stock">Low Stock</option>
-                                    <option value="out_of_stock">
-                                        Out of Stock
-                                    </option>
-                                </select>
+                                <div class="space-y-3">
+                                    <div
+                                        v-for="size in availableSizes"
+                                        :key="size"
+                                        class="flex items-center space-x-3"
+                                    >
+                                        <span
+                                            class="w-12 text-sm text-zinc-400"
+                                            >{{ size }}</span
+                                        >
+                                        <input
+                                            type="number"
+                                            v-model="
+                                                productForm.sizeStock[size]
+                                            "
+                                            class="flex-1 bg-black border border-zinc-800 text-white rounded-lg px-4 py-2 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                                            min="0"
+                                            placeholder="Enter stock"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -324,7 +318,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { categoriesData, productsData } from './MenuConfig'
+import { productsData, categoriesData, availableSizes } from './MenuConfig'
 
 const router = useRouter()
 
@@ -339,6 +333,15 @@ const props = defineProps({
 const category = computed(() => {
     return categoriesData.find(c => c.slug === props.name)
 })
+
+// Initialize size stock
+const initializeSizeStock = () => {
+    const sizeStock = {}
+    availableSizes.forEach(size => {
+        sizeStock[size] = 0
+    })
+    return sizeStock
+}
 
 // Get products for this category
 const categoryProducts = computed(() => {
@@ -357,19 +360,33 @@ const editingProduct = ref(null)
 const productForm = ref({
     name: '',
     price: 0,
-    stock: 0,
-    status: 'in_stock',
     category: category.value?.name || '',
+    sizeStock: initializeSizeStock(),
 })
 
+// Helper function to determine overall status based on size stock
+const getOverallStatus = sizeStock => {
+    if (!sizeStock) return 'out_of_stock'
+
+    const hasAnyStock = Object.values(sizeStock).some(stock => stock > 0)
+    const hasLowStock = Object.values(sizeStock).some(
+        stock => stock > 0 && stock <= 5,
+    )
+
+    if (!hasAnyStock) return 'out_of_stock'
+    if (hasLowStock) return 'low_stock'
+    return 'in_stock'
+}
+
 // Filtered Products
-const displayProducts = computed(() => {
+const filteredProducts = computed(() => {
     return categoryProducts.value.filter(product => {
         const matchesSearch = product.name
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase())
         const matchesStatus =
-            !statusFilter.value || product.status === statusFilter.value
+            !statusFilter.value ||
+            getOverallStatus(product.sizeStock) === statusFilter.value
         return matchesSearch && matchesStatus
     })
 })
@@ -405,21 +422,14 @@ const goBackToCategories = () => {
 }
 
 // CRUD Operations
-const openAddProductModal = () => {
-    editingProduct.value = null
-    productForm.value = {
-        name: '',
-        price: 0,
-        stock: 0,
-        status: 'in_stock',
-        category: category.value?.name || '',
-    }
-    showModal.value = true
-}
-
 const editProduct = product => {
     editingProduct.value = product
-    productForm.value = { ...product }
+    productForm.value = {
+        ...product,
+        sizeStock: product.sizeStock
+            ? { ...product.sizeStock }
+            : initializeSizeStock(),
+    }
     showModal.value = true
 }
 
@@ -429,13 +439,14 @@ const closeModal = () => {
     productForm.value = {
         name: '',
         price: 0,
-        stock: 0,
-        status: 'in_stock',
         category: category.value?.name || '',
+        sizeStock: initializeSizeStock(),
     }
 }
 
 const saveProduct = () => {
+    const now = new Date().toISOString().split('T')[0]
+
     if (editingProduct.value) {
         // Update existing product
         const index = productsData.findIndex(
@@ -445,16 +456,18 @@ const saveProduct = () => {
             productsData[index] = {
                 ...productsData[index],
                 ...productForm.value,
-                lastUpdated: new Date().toISOString().split('T')[0],
+                category: category.value?.name,
+                lastUpdated: now,
             }
         }
     } else {
         // Add new product
         const newProduct = {
-            id: productsData.length + 1,
+            id: Math.max(...productsData.map(p => p.id)) + 1,
             image: '/api/placeholder/80/80',
+            category: category.value?.name,
             ...productForm.value,
-            lastUpdated: new Date().toISOString().split('T')[0],
+            lastUpdated: now,
         }
         productsData.push(newProduct)
     }

@@ -1,17 +1,150 @@
 <template>
     <div class="min-h-screen bg-black p-28">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-zinc-400 text-sm">Total Products</p>
+                        <p class="text-2xl font-bold text-white mt-1">
+                            {{ filteredProducts.length }}
+                        </p>
+                    </div>
+                    <div class="bg-purple-500/10 p-3 rounded-lg">
+                        <svg
+                            class="w-6 h-6 text-purple-500"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <path
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-zinc-400 text-sm">In Stock</p>
+                        <p class="text-2xl font-bold text-emerald-500 mt-1">
+                            {{
+                                filteredProducts.filter(
+                                    p =>
+                                        getOverallStatus(p.sizeStock) ===
+                                        'in_stock',
+                                ).length
+                            }}
+                        </p>
+                    </div>
+                    <div class="bg-emerald-500/10 p-3 rounded-lg">
+                        <svg
+                            class="w-6 h-6 text-emerald-500"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <path
+                                d="M5 13l4 4L19 7"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-zinc-400 text-sm">Low Stock</p>
+                        <p class="text-2xl font-bold text-yellow-500 mt-1">
+                            {{
+                                filteredProducts.filter(
+                                    p =>
+                                        getOverallStatus(p.sizeStock) ===
+                                        'low_stock',
+                                ).length
+                            }}
+                        </p>
+                    </div>
+                    <div class="bg-yellow-500/10 p-3 rounded-lg">
+                        <svg
+                            class="w-6 h-6 text-yellow-500"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <path
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-zinc-400 text-sm">Out of Stock</p>
+                        <p class="text-2xl font-bold text-red-500 mt-1">
+                            {{
+                                filteredProducts.filter(
+                                    p =>
+                                        getOverallStatus(p.sizeStock) ===
+                                        'out_of_stock',
+                                ).length
+                            }}
+                        </p>
+                    </div>
+                    <div class="bg-red-500/10 p-3 rounded-lg">
+                        <svg
+                            class="w-6 h-6 text-red-500"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                        >
+                            <path
+                                d="M6 18L18 6M6 6l12 12"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Search and Filter Section -->
-        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <div
+            class="bg-gradient-to-r from-zinc-900/50 to-zinc-800/30 rounded-xl border border-zinc-800 p-6 mb-8"
+        >
             <div
                 class="flex flex-col md:flex-row md:items-center md:justify-between gap-6"
             >
                 <!-- Search -->
-                <div class="relative flex-1">
+                <div class="relative flex-1 group">
+                    <input
+                        type="text"
+                        v-model="searchQuery"
+                        class="w-full bg-black/50 border border-zinc-800 text-white rounded-xl pl-10 pr-4 py-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+                        placeholder="Search products..."
+                    />
                     <span
                         class="absolute inset-y-0 left-0 pl-3 flex items-center"
                     >
                         <svg
-                            class="h-5 w-5 text-zinc-400"
+                            class="h-5 w-5 text-zinc-400 transition-colors duration-200 group-focus-within:text-purple-500"
                             viewBox="0 0 24 24"
                             fill="none"
                         >
@@ -24,19 +157,13 @@
                             />
                         </svg>
                     </span>
-                    <input
-                        type="text"
-                        v-model="searchQuery"
-                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                        placeholder="Search products..."
-                    />
                 </div>
 
                 <!-- Filters -->
                 <div class="flex flex-wrap gap-4">
                     <select
                         v-model="categoryFilter"
-                        class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                        class="bg-black/50 border border-zinc-800 text-white rounded-xl px-6 py-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
                     >
                         <option value="">All Categories</option>
                         <option
@@ -50,7 +177,7 @@
 
                     <select
                         v-model="statusFilter"
-                        class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                        class="bg-black/50 border border-zinc-800 text-white rounded-xl px-6 py-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
                     >
                         <option value="">All Status</option>
                         <option value="in_stock">In Stock</option>
@@ -58,10 +185,9 @@
                         <option value="out_of_stock">Out of Stock</option>
                     </select>
 
-                    <!-- Add Product Button -->
                     <button
                         @click="openAddProductModal"
-                        class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 flex items-center space-x-2"
+                        class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl hover:from-purple-500 hover:to-purple-600 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
                     >
                         <svg
                             class="w-5 h-5"
@@ -84,18 +210,41 @@
 
         <!-- Products Table -->
         <div
-            class="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden"
+            class="bg-gradient-to-b from-zinc-900/80 to-zinc-900/50 rounded-xl border border-zinc-800 overflow-hidden"
         >
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-zinc-800">
                     <thead class="bg-zinc-900/50">
                         <tr>
                             <th
-                                v-for="header in productTableHeaders"
-                                :key="header.key"
                                 class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
                             >
-                                {{ header.label }}
+                                Product Info
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Price
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Category
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Status
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Stock
+                            </th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider"
+                            >
+                                Collection
                             </th>
                             <th
                                 class="px-6 py-4 text-right text-xs font-medium text-zinc-400 uppercase tracking-wider"
@@ -150,15 +299,109 @@
 
                             <!-- Status -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span :class="getStatusClass(product.status)">
-                                    {{ formatStatus(product.status) }}
+                                <span
+                                    :class="
+                                        getStatusClass(
+                                            getOverallStatus(product.sizeStock),
+                                        )
+                                    "
+                                >
+                                    {{
+                                        formatStatus(
+                                            getOverallStatus(product.sizeStock),
+                                        )
+                                    }}
                                 </span>
                             </td>
 
-                            <!-- Stock -->
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-zinc-300 font-mono">
-                                    {{ product.stock }}
+                            <!-- Stocks with Popover -->
+                            <td class="px-6 py-4 whitespace-nowrap relative">
+                                <button
+                                    @click="toggleStockPopover(product.id)"
+                                    class="inline-flex items-center px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-all duration-200 group"
+                                >
+                                    <span
+                                        class="text-sm font-mono text-zinc-300 group-hover:text-white"
+                                    >
+                                        {{ getTotalStock(product.sizeStock) }}
+                                    </span>
+                                    <svg
+                                        class="w-4 h-4 ml-1.5 text-zinc-400 group-hover:text-white transition-transform duration-200"
+                                        :class="{
+                                            'rotate-180':
+                                                openPopoverId === product.id,
+                                        }"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            d="M19 9l-7 7-7-7"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </button>
+
+                                <!-- Stock Size Popover -->
+                                <div
+                                    v-if="openPopoverId === product.id"
+                                    class="absolute z-10 mt-2 transform -translate-x-1/2 left-1/2"
+                                >
+                                    <div
+                                        class="bg-zinc-900 rounded-xl shadow-lg border border-zinc-700 p-4 w-48"
+                                    >
+                                        <div class="space-y-2">
+                                            <div
+                                                v-for="(
+                                                    stock, size
+                                                ) in product.sizeStock"
+                                                :key="size"
+                                                class="flex items-center justify-between py-1.5"
+                                            >
+                                                <span
+                                                    class="text-sm font-medium text-zinc-300"
+                                                    >Size {{ size }}</span
+                                                >
+                                                <span
+                                                    :class="{
+                                                        'px-2 py-0.5 rounded-md text-xs font-medium': true,
+                                                        'bg-emerald-500/20 text-emerald-400':
+                                                            stock > 10,
+                                                        'bg-yellow-500/20 text-yellow-400':
+                                                            stock <= 10 &&
+                                                            stock > 0,
+                                                        'bg-red-500/20 text-red-400':
+                                                            stock === 0,
+                                                    }"
+                                                >
+                                                    {{ stock }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="mt-2 pt-2 border-t border-zinc-700"
+                                        >
+                                            <div
+                                                class="flex items-center justify-between"
+                                            >
+                                                <span
+                                                    class="text-sm font-medium text-zinc-300"
+                                                    >Total</span
+                                                >
+                                                <span
+                                                    class="text-sm font-medium text-purple-400"
+                                                >
+                                                    {{
+                                                        getTotalStock(
+                                                            product.sizeStock,
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
 
@@ -166,13 +409,6 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-zinc-300">
                                     {{ getCollectionName(product.collection) }}
-                                </div>
-                            </td>
-
-                            <!-- Last Updated -->
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-zinc-400">
-                                    {{ formatDate(product.lastUpdated) }}
                                 </div>
                             </td>
 
@@ -199,28 +435,33 @@
             </div>
 
             <!-- Pagination -->
-            <div class="bg-zinc-900 px-6 py-4 border-t border-zinc-800">
+            <div class="bg-zinc-900/50 px-6 py-4 border-t border-zinc-800">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-zinc-400">
                         Showing
-                        <span class="font-medium text-white">{{
-                            startIndex + 1
-                        }}</span>
+                        <span class="font-medium text-purple-500">
+                            {{ (currentPage - 1) * itemsPerPage + 1 }}
+                        </span>
                         to
-                        <span class="font-medium text-white">{{
-                            endIndex
-                        }}</span>
+                        <span class="font-medium text-purple-500">
+                            {{
+                                Math.min(
+                                    currentPage * itemsPerPage,
+                                    filteredProducts.length,
+                                )
+                            }}
+                        </span>
                         of
-                        <span class="font-medium text-white">{{
-                            totalProducts
-                        }}</span>
+                        <span class="font-medium text-purple-500">
+                            {{ filteredProducts.length }}
+                        </span>
                         products
                     </div>
                     <div class="flex items-center space-x-2">
                         <button
-                            @click="previousPage"
+                            @click="currentPage > 1 && currentPage--"
                             :disabled="currentPage === 1"
-                            class="px-3 py-1 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                            class="px-4 py-2 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:bg-zinc-800/50 rounded-lg"
                         >
                             Previous
                         </button>
@@ -228,21 +469,27 @@
                             <button
                                 v-for="page in displayedPages"
                                 :key="page"
-                                @click="goToPage(page)"
-                                class="px-3 py-1 text-sm rounded-md transition-all duration-200"
-                                :class="
-                                    currentPage === page
-                                        ? 'bg-purple-600 text-white'
-                                        : 'text-zinc-400 hover:text-white'
+                                @click="
+                                    typeof page === 'number' &&
+                                        (currentPage = page)
                                 "
+                                :disabled="typeof page !== 'number'"
+                                class="px-4 py-2 text-sm rounded-lg transition-all duration-200"
+                                :class="[
+                                    typeof page === 'number'
+                                        ? currentPage === page
+                                            ? 'bg-purple-600 text-white'
+                                            : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+                                        : 'text-zinc-600',
+                                ]"
                             >
                                 {{ page }}
                             </button>
                         </div>
                         <button
-                            @click="nextPage"
+                            @click="currentPage < totalPages && currentPage++"
                             :disabled="currentPage === totalPages"
-                            class="px-3 py-1 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                            class="px-4 py-2 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:bg-zinc-800/50 rounded-lg"
                         >
                             Next
                         </button>
@@ -252,24 +499,18 @@
         </div>
 
         <!-- Product Modal -->
-        <div
-            v-if="showModal"
-            class="fixed inset-0 z-50 overflow-y-auto"
-            aria-labelledby="modal-title"
-            role="dialog"
-            aria-modal="true"
-        >
+        <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto">
             <div
                 class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
             >
-                <!-- Background overlay -->
+                <!-- Overlay -->
                 <div
                     class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
                     aria-hidden="true"
                 ></div>
 
                 <div
-                    class="inline-block align-bottom bg-zinc-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                    class="inline-block align-bottom bg-zinc-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
                 >
                     <div class="bg-zinc-900 px-4 pt-5 pb-4 sm:p-6">
                         <h3 class="text-lg font-medium text-white mb-4">
@@ -285,9 +526,8 @@
                             <div>
                                 <label
                                     class="block text-sm font-medium text-zinc-400 mb-1"
+                                    >Product Name</label
                                 >
-                                    Product Name
-                                </label>
                                 <input
                                     type="text"
                                     v-model="productForm.name"
@@ -300,9 +540,8 @@
                             <div>
                                 <label
                                     class="block text-sm font-medium text-zinc-400 mb-1"
+                                    >Price</label
                                 >
-                                    Price
-                                </label>
                                 <div class="relative">
                                     <div
                                         class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -319,13 +558,77 @@
                                 </div>
                             </div>
 
+                            <!-- Size Stock -->
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-zinc-400 mb-2"
+                                    >Stock by Size</label
+                                >
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div
+                                        v-for="size in availableSizes"
+                                        :key="size"
+                                        class="relative bg-zinc-800/30 rounded-xl p-4 border border-zinc-700/50"
+                                    >
+                                        <label
+                                            :for="'size-' + size"
+                                            class="text-sm font-medium text-zinc-300 mb-2"
+                                        >
+                                            Size {{ size }}
+                                        </label>
+                                        <input
+                                            :id="'size-' + size"
+                                            type="number"
+                                            v-model="
+                                                productForm.sizeStock[size]
+                                            "
+                                            class="w-full bg-black/50 border border-zinc-700 text-white rounded-lg px-3 py-2 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all duration-300"
+                                            min="0"
+                                            placeholder="0"
+                                        />
+                                        <div class="absolute top-2 right-2">
+                                            <span
+                                                :class="{
+                                                    'px-2 py-1 rounded-md text-xs font-medium': true,
+                                                    'bg-emerald-500/20 text-emerald-400':
+                                                        productForm.sizeStock[
+                                                            size
+                                                        ] > 10,
+                                                    'bg-yellow-500/20 text-yellow-400':
+                                                        productForm.sizeStock[
+                                                            size
+                                                        ] <= 10 &&
+                                                        productForm.sizeStock[
+                                                            size
+                                                        ] > 0,
+                                                    'bg-red-500/20 text-red-400':
+                                                        !productForm.sizeStock[
+                                                            size
+                                                        ] ||
+                                                        productForm.sizeStock[
+                                                            size
+                                                        ] === 0,
+                                                }"
+                                            >
+                                                {{
+                                                    productForm.sizeStock[
+                                                        size
+                                                    ] > 0
+                                                        ? 'In Stock'
+                                                        : 'Out'
+                                                }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Category -->
                             <div>
                                 <label
                                     class="block text-sm font-medium text-zinc-400 mb-1"
+                                    >Category</label
                                 >
-                                    Category
-                                </label>
                                 <select
                                     v-model="productForm.category"
                                     class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
@@ -340,29 +643,12 @@
                                 </select>
                             </div>
 
-                            <!-- Stock -->
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-zinc-400 mb-1"
-                                >
-                                    Stock
-                                </label>
-                                <input
-                                    type="number"
-                                    v-model="productForm.stock"
-                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                                    required
-                                    min="0"
-                                />
-                            </div>
-
                             <!-- Collection -->
                             <div>
                                 <label
                                     class="block text-sm font-medium text-zinc-400 mb-1"
+                                    >Collection</label
                                 >
-                                    Collection
-                                </label>
                                 <select
                                     v-model="productForm.collection"
                                     class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
@@ -377,27 +663,10 @@
                                     </option>
                                 </select>
                             </div>
-
-                            <!-- Status -->
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-zinc-400 mb-1"
-                                >
-                                    Status
-                                </label>
-                                <select
-                                    v-model="productForm.status"
-                                    class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                                >
-                                    <option value="in_stock">In Stock</option>
-                                    <option value="low_stock">Low Stock</option>
-                                    <option value="out_of_stock">
-                                        Out of Stock
-                                    </option>
-                                </select>
-                            </div>
                         </form>
                     </div>
+
+                    <!-- Modal Footer -->
                     <div
                         class="bg-zinc-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
                     >
@@ -423,13 +692,48 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
     productsData,
-    productTableHeaders,
     productCategories,
     collectionsData,
+    availableSizes, // Import availableSizes dari MenuConfig
 } from './MenuConfig'
+
+// Add new ref for popover
+const openPopoverId = ref(null)
+
+// Add new method for handling popover
+const toggleStockPopover = productId => {
+    openPopoverId.value = openPopoverId.value === productId ? null : productId
+}
+
+// Add method to calculate total stock
+const getTotalStock = sizeStock => {
+    if (!sizeStock) return 0
+    return Object.values(sizeStock).reduce((sum, current) => sum + current, 0)
+}
+
+// Add click outside handler for popover
+onMounted(() => {
+    document.addEventListener('click', e => {
+        if (
+            !e.target.closest('button') &&
+            !e.target.closest('.stock-popover')
+        ) {
+            openPopoverId.value = null
+        }
+    })
+})
+
+// Initialize form with size stock
+const initializeSizeStock = () => {
+    const sizeStock = {}
+    availableSizes.forEach(size => {
+        sizeStock[size] = 0
+    })
+    return sizeStock
+}
 
 // Search and Filter
 const searchQuery = ref('')
@@ -447,10 +751,25 @@ const productForm = ref({
     name: '',
     price: 0,
     category: productCategories[0],
-    status: 'in_stock',
-    stock: 0,
+    sizeStock: initializeSizeStock(),
     collection: '',
+    image: '/api/placeholder/80/80', // Tambahkan default image
+    lastUpdated: new Date().toISOString().split('T')[0], // Tambahkan default lastUpdated
 })
+
+// Helper function to determine overall status based on size stock
+const getOverallStatus = sizeStock => {
+    if (!sizeStock) return 'out_of_stock' // Handle kasus dimana sizeStock undefined
+
+    const hasAnyStock = Object.values(sizeStock).some(stock => stock > 0)
+    const hasLowStock = Object.values(sizeStock).some(
+        stock => stock > 0 && stock <= 5,
+    )
+
+    if (!hasAnyStock) return 'out_of_stock'
+    if (hasLowStock) return 'low_stock'
+    return 'in_stock'
+}
 
 // Computed Properties
 const filteredProducts = computed(() => {
@@ -461,39 +780,47 @@ const filteredProducts = computed(() => {
         const matchesCategory =
             !categoryFilter.value || product.category === categoryFilter.value
         const matchesStatus =
-            !statusFilter.value || product.status === statusFilter.value
+            !statusFilter.value ||
+            getOverallStatus(product.sizeStock) === statusFilter.value
         return matchesSearch && matchesCategory && matchesStatus
     })
 })
 
-const totalProducts = computed(() => filteredProducts.value.length)
-const totalPages = computed(() => Math.ceil(totalProducts.value / itemsPerPage))
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage)
-const endIndex = computed(() =>
-    Math.min(startIndex.value + itemsPerPage, totalProducts.value),
-)
+// Tambahkan computed properties untuk paginasi
+const displayedPages = computed(() => {
+    const total = Math.ceil(filteredProducts.value.length / itemsPerPage)
+    if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1)
 
-const paginatedProducts = computed(() => {
-    return filteredProducts.value.slice(startIndex.value, endIndex.value)
+    const current = currentPage.value
+    const pages = []
+
+    if (current <= 3) {
+        for (let i = 1; i <= 4; i++) pages.push(i)
+        pages.push('...')
+        pages.push(total)
+    } else if (current >= total - 2) {
+        pages.push(1)
+        pages.push('...')
+        for (let i = total - 3; i <= total; i++) pages.push(i)
+    } else {
+        pages.push(1)
+        pages.push('...')
+        for (let i = current - 1; i <= current + 1; i++) pages.push(i)
+        pages.push('...')
+        pages.push(total)
+    }
+
+    return pages
 })
 
-const displayedPages = computed(() => {
-    const pages = []
-    const maxVisiblePages = 5
-    let startPage = Math.max(
-        1,
-        currentPage.value - Math.floor(maxVisiblePages / 2),
-    )
-    let endPage = Math.min(totalPages.value, startPage + maxVisiblePages - 1)
+const totalPages = computed(() =>
+    Math.ceil(filteredProducts.value.length / itemsPerPage),
+)
 
-    if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1)
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-        pages.push(i)
-    }
-    return pages
+// Modifikasi paginatedProducts untuk menggunakan currentPage
+const paginatedProducts = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage
+    return filteredProducts.value.slice(start, start + itemsPerPage)
 })
 
 // Methods
@@ -511,15 +838,7 @@ const getStatusClass = status => {
         low_stock: 'bg-yellow-900/30 text-yellow-400 border-yellow-700/50',
         out_of_stock: 'bg-red-900/30 text-red-400 border-red-700/50',
     }
-    return `${baseClasses} ${statusClasses[status]}`
-}
-
-const formatDate = date => {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    })
+    return `${baseClasses} ${statusClasses[status] || statusClasses.out_of_stock}`
 }
 
 const formatPrice = price => {
@@ -540,16 +859,22 @@ const openAddProductModal = () => {
         name: '',
         price: 0,
         category: productCategories[0],
-        status: 'in_stock',
-        stock: 0,
+        sizeStock: initializeSizeStock(),
         collection: '',
+        image: '/api/placeholder/80/80',
+        lastUpdated: new Date().toISOString().split('T')[0],
     }
     showModal.value = true
 }
 
 const editProduct = product => {
     editingProduct.value = product
-    productForm.value = { ...product }
+    productForm.value = {
+        ...product,
+        sizeStock: product.sizeStock
+            ? { ...product.sizeStock }
+            : initializeSizeStock(),
+    }
     showModal.value = true
 }
 
@@ -560,13 +885,16 @@ const closeModal = () => {
         name: '',
         price: 0,
         category: productCategories[0],
-        status: 'in_stock',
-        stock: 0,
+        sizeStock: initializeSizeStock(),
         collection: '',
+        image: '/api/placeholder/80/80',
+        lastUpdated: new Date().toISOString().split('T')[0],
     }
 }
 
 const saveProduct = () => {
+    const now = new Date().toISOString().split('T')[0]
+
     if (editingProduct.value) {
         // Update existing product
         const index = productsData.findIndex(
@@ -576,16 +904,15 @@ const saveProduct = () => {
             productsData[index] = {
                 ...productsData[index],
                 ...productForm.value,
-                lastUpdated: new Date().toISOString().split('T')[0],
+                lastUpdated: now,
             }
         }
     } else {
         // Add new product
         const newProduct = {
-            id: productsData.length + 1,
+            id: Math.max(...productsData.map(p => p.id)) + 1, // Ensure unique ID
             ...productForm.value,
-            lastUpdated: new Date().toISOString().split('T')[0],
-            image: '/api/placeholder/80/80',
+            lastUpdated: now,
         }
         productsData.push(newProduct)
     }
@@ -603,23 +930,6 @@ const deleteProduct = productId => {
             productsData.splice(index, 1)
         }
     }
-}
-
-// Pagination Methods
-const previousPage = () => {
-    if (currentPage.value > 1) {
-        currentPage.value--
-    }
-}
-
-const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-        currentPage.value++
-    }
-}
-
-const goToPage = page => {
-    currentPage.value = page
 }
 </script>
 

@@ -193,14 +193,21 @@ export const tableHeaders = [
     { key: 'lastLogin', label: 'Last Login' },
 ]
 
+export const availableSizes = ['S', 'M', 'L', 'XL', 'XXL']
+
 export const productsData = [
     {
         id: 1,
         name: 'Project DYSTOPIAN - Spectrum',
         price: 369000,
         category: 'Tops',
-        status: 'in_stock',
-        stock: 666,
+        sizeStock: {
+            S: 100,
+            M: 200,
+            L: 166,
+            XL: 150,
+            XXL: 50,
+        },
         image: '/dystopian1.jpg',
         collection: 1,
         lastUpdated: '2024-03-01',
@@ -210,8 +217,13 @@ export const productsData = [
         name: 'Project DYSTOPIAN - Purpureal',
         price: 196000,
         category: 'Tops',
-        status: 'in_stock',
-        stock: 23,
+        sizeStock: {
+            S: 5,
+            M: 8,
+            L: 5,
+            XL: 3,
+            XXL: 2,
+        },
         image: '/dystopian2.jpg',
         collection: 1,
         lastUpdated: '2024-03-02',
@@ -221,8 +233,13 @@ export const productsData = [
         name: 'Project DYSTOPIAN - Mutation',
         price: 196000,
         category: 'Accessories',
-        status: 'low_stock',
-        stock: 5,
+        sizeStock: {
+            S: 2,
+            M: 1,
+            L: 1,
+            XL: 1,
+            XXL: 0,
+        },
         image: '/dystopian3.jpg',
         collection: 1,
         lastUpdated: '2024-03-01',
@@ -232,19 +249,29 @@ export const productsData = [
         name: 'Project DYSTOPIAN - Umbra',
         price: 96000,
         category: 'Accessories',
-        status: 'out_of_stock',
-        stock: 0,
+        sizeStock: {
+            S: 0,
+            M: 0,
+            L: 0,
+            XL: 0,
+            XXL: 0,
+        },
         image: '/dystopian4.jpg',
         collection: 1,
         lastUpdated: '2024-02-28',
     },
     {
-        id: 4,
+        id: 5,
         name: 'Catharsis EMPIRE - Izanagiryū & Izanamiryū',
         price: 969000,
         category: 'Jackets',
-        status: 'in_stock',
-        stock: 666,
+        sizeStock: {
+            S: 150,
+            M: 166,
+            L: 150,
+            XL: 100,
+            XXL: 100,
+        },
         image: '/catharsisempire1.jpg',
         collection: 2,
         lastUpdated: '2024-02-28',
@@ -257,8 +284,7 @@ export const productTableHeaders = [
     { key: 'category', label: 'Category' },
     { key: 'status', label: 'Status' },
     { key: 'stock', label: 'Stock' },
-    { key: 'collection', label: 'Collection' }, // Mengganti SKU dengan Collection
-    { key: 'lastUpdated', label: 'Last Updated' },
+    { key: 'collection', label: 'Collection' },
 ]
 
 export const productCategories = [
@@ -273,22 +299,16 @@ export const collectionsData = [
     {
         id: 1,
         name: 'PROJECT DYSTOPIAN',
-        description: `An impactful disaster came at a great cost to humanity—but it wasn’t souls that were taken; it was the very grasp of life itself that was altered.
-                        They seem alive, but in a strange, unsettling way.
-                        Perhaps because they are half-dead; "moribund" might be the right word to capture this moment.
-
-                        Strange and vile, yet bursting with vivid colors—we are here to show you what it means to be pristine.
-                        With great honor, we present and announce that Project: DYSTOPIAN from Catharsis Empire`,
+        description: '-',
         status: 'active',
         productsCount: 0,
         image: '/api/placeholder/200/100',
-        featuredImage: '/projectdystopian.png',
         slug: 'project-dystopian',
     },
     {
         id: 2,
         name: 'CATHARSIS EMPIRE',
-        description: 'Essential supplies for students',
+        description: '-',
         status: 'scheduled',
         productsCount: 0,
         image: '/api/placeholder/200/100',
@@ -298,7 +318,7 @@ export const collectionsData = [
     {
         id: 3,
         name: 'CATHARSIS REBORN',
-        description: 'Special discounts on spring items',
+        description: '-',
         status: 'ended',
         productsCount: 0,
         image: '/api/placeholder/200/100',

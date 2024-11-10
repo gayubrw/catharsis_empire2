@@ -81,40 +81,48 @@
                 class="group bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
                 @click="navigateToCollection(collection)"
             >
-                <!-- Collection Image -->
-                <div class="relative h-[600px] overflow-hidden">
-                    <img
-                        :src="collection.featuredImage"
-                        :alt="collection.name"
-                        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"
-                    ></div>
-
-                    <!-- Status Badge -->
-                    <div class="absolute top-4 right-4">
+                <!-- Collection Header -->
+                <div class="p-6 border-b border-zinc-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-12 w-12 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center overflow-hidden"
+                            >
+                                <svg
+                                    class="w-6 h-6 text-white"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-white group-hover:text-purple-400 transition-colors duration-300"
+                                >
+                                    {{ collection.name }}
+                                </h3>
+                                <p
+                                    class="text-sm text-zinc-400 mt-1 line-clamp-1"
+                                >
+                                    {{ collection.description }}
+                                </p>
+                            </div>
+                        </div>
                         <span :class="getStatusClass(collection.status)">
                             {{ collection.status }}
                         </span>
                     </div>
-
-                    <!-- Collection Info Overlay -->
-                    <div class="absolute bottom-0 left-0 right-0 p-6">
-                        <h3
-                            class="text-xl font-bold text-white tracking-wider group-hover:text-purple-400 transition-colors duration-300"
-                        >
-                            {{ collection.name }}
-                        </h3>
-                        <p class="mt-2 text-sm text-zinc-300 line-clamp-2">
-                            {{ collection.description }}
-                        </p>
-                    </div>
                 </div>
 
                 <!-- Collection Stats -->
-                <div class="p-6 space-y-4 border-t border-zinc-800">
-                    <!-- Stats Grid -->
+                <div class="px-6 py-4 bg-zinc-900/50">
                     <div class="grid gap-4">
                         <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
                             <span class="text-sm text-zinc-400">Products</span>
@@ -123,51 +131,51 @@
                             </p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Actions -->
-                    <div
-                        class="flex justify-end space-x-3 pt-4 border-t border-zinc-800"
-                        @click.stop
+                <!-- Actions -->
+                <div
+                    class="px-6 py-4 border-t border-zinc-800 flex justify-end space-x-3"
+                    @click.stop
+                >
+                    <button
+                        @click="editCollection(collection)"
+                        class="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm flex items-center space-x-1"
                     >
-                        <button
-                            @click="editCollection(collection)"
-                            class="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm flex items-center space-x-1"
+                        <svg
+                            class="w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
                         >
-                            <svg
-                                class="w-4 h-4"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                            <span>Edit</span>
-                        </button>
-                        <button
-                            @click="deleteCollection(collection.id)"
-                            class="text-red-400 hover:text-red-300 transition-colors duration-200 text-sm flex items-center space-x-1"
+                            <path
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>Edit</span>
+                    </button>
+                    <button
+                        @click="deleteCollection(collection.id)"
+                        class="text-red-400 hover:text-red-300 transition-colors duration-200 text-sm flex items-center space-x-1"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
                         >
-                            <svg
-                                class="w-4 h-4"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                            <span>Delete</span>
-                        </button>
-                    </div>
+                            <path
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>Delete</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -299,15 +307,10 @@ const collectionForm = ref({
     status: 'active',
 })
 
-// Navigation function
-const navigateToCollection = collection => {
-    router.push(`/admin/collection/${collection.slug}`)
-}
-
-// Existing computed properties and methods
+// Computed Properties
 const displayCollections = computed(() => {
     return collectionsData.filter(collection => {
-        // Hitung jumlah produk untuk collection ini
+        // Calculate products count
         const productCount = productsData.filter(
             product => product.collection === collection.id,
         ).length
@@ -315,7 +318,6 @@ const displayCollections = computed(() => {
         // Update productsCount
         collection.productsCount = productCount
 
-        // Filter berdasarkan pencarian dan status
         const matchesSearch = collection.name
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase())
@@ -334,6 +336,10 @@ const getStatusClass = status => {
         ended: 'bg-zinc-900/30 text-zinc-400 border-zinc-700/50',
     }
     return `${baseClasses} ${statusClasses[status]}`
+}
+
+const navigateToCollection = collection => {
+    router.push(`/admin/collection/${collection.slug}`)
 }
 
 const openAddCollectionModal = () => {
@@ -385,7 +391,6 @@ const saveCollection = () => {
             ...collectionForm.value,
             productsCount: 0, // Awalnya 0 karena collection baru
             image: '/api/placeholder/200/100',
-            featuredImage: '/api/placeholder/400/200',
             // Generate slug from name
             slug: collectionForm.value.name.toLowerCase().replace(/\s+/g, '-'),
         }
