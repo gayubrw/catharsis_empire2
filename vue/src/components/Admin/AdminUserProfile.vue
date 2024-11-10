@@ -24,6 +24,23 @@
             v-if="showUserMenu"
             class="absolute right-0 mt-2 w-48 bg-zinc-900 rounded-lg shadow-xl border border-zinc-800 py-1 z-50"
         >
+            <!-- View Store Link -->
+            <router-link
+                to="/"
+                class="flex items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors duration-200"
+            >
+                <svg
+                    class="w-4 h-4 mr-2 text-zinc-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                View Store
+            </router-link>
+
             <a
                 href="#"
                 class="flex items-center px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors duration-200"

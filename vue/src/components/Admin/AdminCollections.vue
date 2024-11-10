@@ -1,74 +1,75 @@
 <template>
     <div class="min-h-screen bg-black p-28">
         <!-- Header -->
-        <div class="mb-8 flex justify-between items-center">
-            <div>
-                <h1
-                    class="text-3xl font-bold text-white tracking-wider uppercase"
-                >
-                    Collections
-                </h1>
-                <p class="text-zinc-400 mt-1 tracking-wide">
-                    Curate and manage your featured collections
-                </p>
-            </div>
-            <button
-                @click="openAddCollectionModal"
-                class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center space-x-2 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
-            >
-                <svg
-                    class="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                >
-                    <path
-                        d="M12 4v16m8-8H4"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                </svg>
-                <span>Add Collection</span>
-            </button>
-        </div>
-
-        <!-- Filters Section -->
-        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Search -->
-                <div class="relative">
-                    <input
-                        type="text"
-                        v-model="searchQuery"
-                        class="w-full bg-black border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                        placeholder="Search collections..."
-                    />
-                    <svg
-                        class="w-5 h-5 absolute left-3 top-3 text-zinc-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
+        <div class="mb-8">
+            <div class="flex flex-col space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1
+                            class="text-3xl font-bold text-white tracking-wider uppercase"
+                        >
+                            Collections
+                        </h1>
+                        <p class="text-zinc-400 mt-1 tracking-wide">
+                            Curate and manage your featured collections
+                        </p>
+                    </div>
+                    <button
+                        @click="openAddCollectionModal"
+                        class="bg-purple-600 text-white px-4 py-2.5 rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center space-x-2 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
                     >
-                        <path
-                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                        <svg
+                            class="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
                             stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
+                        >
+                            <path
+                                d="M12 4v16m8-8H4"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>Add Collection</span>
+                    </button>
                 </div>
 
-                <!-- Status Filter -->
-                <select
-                    v-model="statusFilter"
-                    class="bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                >
-                    <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="scheduled">Scheduled</option>
-                    <option value="ended">Ended</option>
-                </select>
+                <div class="flex gap-4">
+                    <!-- Search -->
+                    <div class="relative flex-1">
+                        <input
+                            type="text"
+                            v-model="searchQuery"
+                            class="w-full bg-zinc-900/50 border border-zinc-800 text-white rounded-lg pl-10 pr-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                            placeholder="Search collections..."
+                        />
+                        <svg
+                            class="w-5 h-5 absolute left-3 top-3 text-zinc-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <path
+                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <select
+                        v-model="statusFilter"
+                        class="w-40 bg-zinc-900/50 border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
+                    >
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="ended">Ended</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -77,7 +78,8 @@
             <div
                 v-for="collection in displayCollections"
                 :key="collection.id"
-                class="group bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300"
+                class="group bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
+                @click="navigateToCollection(collection)"
             >
                 <!-- Collection Image -->
                 <div class="relative h-[600px] overflow-hidden">
@@ -113,17 +115,11 @@
                 <!-- Collection Stats -->
                 <div class="p-6 space-y-4 border-t border-zinc-800">
                     <!-- Stats Grid -->
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid gap-4">
                         <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
                             <span class="text-sm text-zinc-400">Products</span>
                             <p class="mt-1 text-lg font-mono text-white">
                                 {{ collection.productsCount }}
-                            </p>
-                        </div>
-                        <div class="text-center p-3 bg-zinc-800/50 rounded-lg">
-                            <span class="text-sm text-zinc-400">Duration</span>
-                            <p class="mt-1 text-sm font-mono text-white">
-                                {{ formatDate(collection.startDate) }}
                             </p>
                         </div>
                     </div>
@@ -131,6 +127,7 @@
                     <!-- Actions -->
                     <div
                         class="flex justify-end space-x-3 pt-4 border-t border-zinc-800"
+                        @click.stop
                     >
                         <button
                             @click="editCollection(collection)"
@@ -238,36 +235,6 @@
                                 ></textarea>
                             </div>
 
-                            <!-- Dates -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-zinc-400 mb-1"
-                                    >
-                                        Start Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        v-model="collectionForm.startDate"
-                                        class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-medium text-zinc-400 mb-1"
-                                    >
-                                        End Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        v-model="collectionForm.endDate"
-                                        class="w-full bg-black border border-zinc-800 text-white rounded-lg px-4 py-2.5 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all duration-300"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
                             <!-- Status -->
                             <div>
                                 <label
@@ -314,7 +281,10 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { collectionsData } from './MenuConfig'
+import { useRouter } from 'vue-router'
+import { collectionsData, productsData } from './MenuConfig'
+
+const router = useRouter()
 
 // Search and Filter
 const searchQuery = ref('')
@@ -327,13 +297,25 @@ const collectionForm = ref({
     name: '',
     description: '',
     status: 'active',
-    startDate: '',
-    endDate: '',
 })
 
-// Computed Properties
+// Navigation function
+const navigateToCollection = collection => {
+    router.push(`/admin/collection/${collection.slug}`)
+}
+
+// Existing computed properties and methods
 const displayCollections = computed(() => {
     return collectionsData.filter(collection => {
+        // Hitung jumlah produk untuk collection ini
+        const productCount = productsData.filter(
+            product => product.collection === collection.id,
+        ).length
+
+        // Update productsCount
+        collection.productsCount = productCount
+
+        // Filter berdasarkan pencarian dan status
         const matchesSearch = collection.name
             .toLowerCase()
             .includes(searchQuery.value.toLowerCase())
@@ -343,7 +325,6 @@ const displayCollections = computed(() => {
     })
 })
 
-// Methods
 const getStatusClass = status => {
     const baseClasses =
         'px-3 py-1 text-xs font-medium rounded-full border backdrop-blur-sm'
@@ -355,22 +336,12 @@ const getStatusClass = status => {
     return `${baseClasses} ${statusClasses[status]}`
 }
 
-const formatDate = date => {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    })
-}
-
 const openAddCollectionModal = () => {
     editingCollection.value = null
     collectionForm.value = {
         name: '',
         description: '',
         status: 'active',
-        startDate: '',
-        endDate: '',
     }
     showModal.value = true
 }
@@ -388,8 +359,6 @@ const closeModal = () => {
         name: '',
         description: '',
         status: 'active',
-        startDate: '',
-        endDate: '',
     }
 }
 
@@ -403,6 +372,10 @@ const saveCollection = () => {
             collectionsData[index] = {
                 ...collectionsData[index],
                 ...collectionForm.value,
+                // Generate slug from name
+                slug: collectionForm.value.name
+                    .toLowerCase()
+                    .replace(/\s+/g, '-'),
             }
         }
     } else {
@@ -410,9 +383,11 @@ const saveCollection = () => {
         const newCollection = {
             id: collectionsData.length + 1,
             ...collectionForm.value,
-            productsCount: 0,
+            productsCount: 0, // Awalnya 0 karena collection baru
             image: '/api/placeholder/200/100',
             featuredImage: '/api/placeholder/400/200',
+            // Generate slug from name
+            slug: collectionForm.value.name.toLowerCase().replace(/\s+/g, '-'),
         }
         collectionsData.push(newCollection)
     }
@@ -422,12 +397,26 @@ const saveCollection = () => {
 const deleteCollection = collectionId => {
     if (
         confirm(
-            'Are you sure you want to delete this collection? This action cannot be undone.',
+            'Are you sure you want to delete this collection? This action cannot be undone and will also delete all products in this collection.',
         )
     ) {
+        // Hapus collection
         const index = collectionsData.findIndex(c => c.id === collectionId)
         if (index !== -1) {
             collectionsData.splice(index, 1)
+
+            // Hapus semua produk yang terkait dengan collection ini
+            const productsToRemove = productsData.filter(
+                p => p.collection === collectionId,
+            )
+            productsToRemove.forEach(product => {
+                const productIndex = productsData.findIndex(
+                    p => p.id === product.id,
+                )
+                if (productIndex !== -1) {
+                    productsData.splice(productIndex, 1)
+                }
+            })
         }
     }
 }

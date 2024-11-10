@@ -1,24 +1,5 @@
 <template>
     <aside class="fixed left-0 bottom-0 w-64 bg-black" style="top: 96px">
-        <!-- Store Link -->
-        <div class="flex items-center justify-center py-4">
-            <router-link
-                to="/"
-                class="text-zinc-400 hover:text-purple-400 transition-colors duration-200 uppercase text-sm tracking-wider flex items-center space-x-2"
-            >
-                <svg
-                    class="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span>View Store</span>
-            </router-link>
-        </div>
-
         <!-- Navigation Menu -->
         <nav class="mt-6 px-3">
             <div class="space-y-1">

@@ -12,14 +12,16 @@ import CartDetails from '@/components/CartDetails.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
 import TransactionView from '@/views/TransactionView.vue'
 import AdminLayout from '@/components/Admin/AdminLayout.vue'
-import AdminDashboard from '@/components/Admin/Admin-dashboard.vue'
-import AdminOrders from '@/components/Admin/Admin-orders.vue'
+import AdminDashboard from '@/components/Admin/AdminDashboard.vue'
+import AdminOrders from '@/components/Admin/AdminOrders.vue'
 import AppLayout from '@/views/AppLayout.vue'
-import AdminUsers from '@/components/Admin/Admin-users.vue'
-import AdminProducts from '@/components/Admin/Admin-products.vue'
-import AdminCollections from '@/components/Admin/Admin-collections.vue'
-import AdminCategories from '@/components/Admin/Admin-categories.vue'
-import AdminRoles from '@/components/Admin/Admin-roles.vue'
+import AdminUsers from '@/components/Admin/AdminUsers.vue'
+import AdminProducts from '@/components/Admin/AdminProducts.vue'
+import AdminCollections from '@/components/Admin/AdminCollections.vue'
+import AdminCategories from '@/components/Admin/AdminCategories.vue'
+import AdminRoles from '@/components/Admin/AdminRoles.vue'
+import AdminCollectionDetail from '@/components/Admin/AdminCollectionDetail.vue'
+import AdminCategoryDetail from '@/components/Admin/AdminCategoryDetail.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -150,9 +152,21 @@ const router = createRouter({
                     component: AdminCollections,
                 },
                 {
+                    path: 'collection/:name',
+                    name: 'admin-collection-detail',
+                    component: AdminCollectionDetail,
+                    props: true,
+                },
+                {
                     path: 'categories',
                     name: 'admin-categories',
                     component: AdminCategories,
+                },
+                {
+                    path: 'category/:name',
+                    name: 'admin-category-detail',
+                    component: AdminCategoryDetail,
+                    props: true,
                 },
                 {
                     path: 'roles',
