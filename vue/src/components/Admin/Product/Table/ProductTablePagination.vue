@@ -3,20 +3,22 @@
         <div class="flex items-center justify-between">
             <div class="text-sm text-zinc-400">
                 Showing
-                <span class="font-medium text-purple-500">{{
-                    startIndex
-                }}</span>
+                <span class="font-medium text-purple-500">
+                    {{ startIndex }}
+                </span>
                 to
-                <span class="font-medium text-purple-500">{{ endIndex }}</span>
+                <span class="font-medium text-purple-500">
+                    {{ endIndex }}
+                </span>
                 of
-                <span class="font-medium text-purple-500">{{
-                    totalItems
-                }}</span>
+                <span class="font-medium text-purple-500">
+                    {{ totalItems }}
+                </span>
                 products
             </div>
             <div class="flex items-center space-x-2">
                 <button
-                    @click="prevPage"
+                    @click="prev"
                     :disabled="currentPage === 1"
                     class="px-4 py-2 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:bg-zinc-800/50 rounded-lg"
                 >
@@ -26,7 +28,7 @@
                     <button
                         v-for="page in displayedPages"
                         :key="page"
-                        @click="handlePageClick(page)"
+                        @click="typeof page === 'number' && updatePage(page)"
                         :disabled="typeof page !== 'number'"
                         class="px-4 py-2 text-sm rounded-lg transition-all duration-200"
                         :class="getPageButtonClass(page)"
@@ -35,7 +37,7 @@
                     </button>
                 </div>
                 <button
-                    @click="nextPage"
+                    @click="next"
                     :disabled="currentPage === totalPages"
                     class="px-4 py-2 text-sm text-zinc-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:bg-zinc-800/50 rounded-lg"
                 >
@@ -60,13 +62,12 @@ const props = defineProps({
     },
     itemsPerPage: {
         type: Number,
-        default: 4,
+        required: true,
     },
 })
 
 const emit = defineEmits(['update:currentPage'])
 
-// Computed
 const totalPages = computed(() =>
     Math.ceil(props.totalItems / props.itemsPerPage),
 )
@@ -86,10 +87,8 @@ const displayedPages = computed(() => {
 
     if (current <= 3) {
         for (let i = 1; i <= 4; i++) pages.push(i)
-        if (total > 4) {
-            pages.push('...')
-            pages.push(total)
-        }
+        pages.push('...')
+        pages.push(total)
     } else if (current >= total - 2) {
         pages.push(1)
         pages.push('...')
@@ -105,29 +104,26 @@ const displayedPages = computed(() => {
     return pages
 })
 
-// Methods
-const handlePageClick = page => {
-    if (typeof page === 'number') {
-        emit('update:currentPage', page)
-    }
-}
-
-const prevPage = () => {
-    if (props.currentPage > 1) {
-        emit('update:currentPage', props.currentPage - 1)
-    }
-}
-
-const nextPage = () => {
-    if (props.currentPage < totalPages.value) {
-        emit('update:currentPage', props.currentPage + 1)
-    }
-}
-
 const getPageButtonClass = page => {
     if (typeof page !== 'number') return 'text-zinc-600'
     return props.currentPage === page
         ? 'bg-purple-600 text-white'
         : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+}
+
+const updatePage = page => {
+    emit('update:currentPage', page)
+}
+
+const prev = () => {
+    if (props.currentPage > 1) {
+        updatePage(props.currentPage - 1)
+    }
+}
+
+const next = () => {
+    if (props.currentPage < totalPages.value) {
+        updatePage(props.currentPage + 1)
+    }
 }
 </script>

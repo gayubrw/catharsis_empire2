@@ -17,6 +17,12 @@
                 />
 
                 <FilterSelect
+                    v-model="collectionLocal"
+                    :options="collectionOptions"
+                    placeholder="All Collections"
+                />
+
+                <FilterSelect
                     v-model="statusLocal"
                     :options="statusOptions"
                     placeholder="All Status"
@@ -47,7 +53,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { collectionsData } from '@/components/Admin/MenuConfig'
 import SearchInput from './SearchInput.vue'
 import FilterSelect from './FilterSelect.vue'
 
@@ -56,6 +63,13 @@ const statusOptions = [
     { value: 'low_stock', label: 'Low Stock' },
     { value: 'out_of_stock', label: 'Out of Stock' },
 ]
+
+const collectionOptions = computed(() => {
+    return collectionsData.map(collection => ({
+        value: collection.id.toString(),
+        label: collection.name,
+    }))
+})
 
 const props = defineProps({
     search: {
@@ -70,6 +84,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    collection: {
+        type: String,
+        default: '',
+    },
     categories: {
         type: Array,
         required: true,
@@ -80,6 +98,7 @@ const emit = defineEmits([
     'update:search',
     'update:category',
     'update:status',
+    'update:collection',
     'add-product',
 ])
 
@@ -87,11 +106,13 @@ const emit = defineEmits([
 const searchLocal = ref(props.search)
 const categoryLocal = ref(props.category)
 const statusLocal = ref(props.status)
+const collectionLocal = ref(props.collection)
 
 // Watch for changes
 watch(searchLocal, val => emit('update:search', val))
 watch(categoryLocal, val => emit('update:category', val))
 watch(statusLocal, val => emit('update:status', val))
+watch(collectionLocal, val => emit('update:collection', val))
 
 // Watch for prop changes
 watch(
@@ -105,5 +126,9 @@ watch(
 watch(
     () => props.status,
     val => (statusLocal.value = val),
+)
+watch(
+    () => props.collection,
+    val => (collectionLocal.value = val),
 )
 </script>

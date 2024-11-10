@@ -8,6 +8,7 @@
             v-model:search="searchQuery"
             v-model:category="categoryFilter"
             v-model:status="statusFilter"
+            v-model:collection="collectionFilter"
             :categories="productCategories"
             @add-product="openAddProductModal"
         />
@@ -76,6 +77,7 @@ import DeleteConfirmationModal from './Product/Modal/DeleteConfirmationModal.vue
 const searchQuery = ref('')
 const categoryFilter = ref('')
 const statusFilter = ref('')
+const collectionFilter = ref('') // Add collection filter
 const showModal = ref(false)
 const showStockModal = ref(false)
 const showDeleteModal = ref(false)
@@ -96,7 +98,15 @@ const filteredProducts = computed(() => {
         const matchesStatus =
             !statusFilter.value ||
             getOverallStatus(product.sizeStock) === statusFilter.value
-        return matchesSearch && matchesCategory && matchesStatus
+        const matchesCollection =
+            !collectionFilter.value ||
+            product.collection === parseInt(collectionFilter.value)
+        return (
+            matchesSearch &&
+            matchesCategory &&
+            matchesStatus &&
+            matchesCollection
+        )
     })
 })
 
